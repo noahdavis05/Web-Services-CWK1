@@ -1,8 +1,6 @@
 from fastapi import FastAPI
-
+from .routers import routes
 
 app = FastAPI()
 
-@app.get("/users/")
-def read_users():
-    return "hi"
+app.include_router(routes.router)
