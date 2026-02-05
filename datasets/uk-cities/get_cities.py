@@ -26,5 +26,8 @@ for row in largest_cities.itertuples():
         }
     )
 
-print(cities)
-
+# TEMP
+# write all cities to a text file
+with open("data/cities.txt", "w") as f:
+    for city in cities:
+        f.write(city["name"] + "\n")

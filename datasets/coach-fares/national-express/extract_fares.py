@@ -1,7 +1,6 @@
 from lxml import etree
+from get_valid_files import get_valid_files
 
-tree = etree.parse("NATX_2025_11_05/FX-PI-01_UK_NATX_LINE-FARE_777_I_Adult-Fare-Inbound-single_2025-11-05_2024-01-26_1848.xml") 
-root = tree.getroot()
 ns = {'nx': 'http://www.netex.org.uk/netex'}
 
 def get_zone_for_stop(stop_id):
@@ -58,5 +57,70 @@ def get_fare(origin_naptan, dest_naptan):
     return "Price ID found, but no <Amount> tag exists for it."
 
 
+# Function will take the xml file root and extract all the cities from it
+# It will return the cities and their corresponding natpan
+def extract_all_cities(root):
+    zone_data = []
+
+    # Find every FareZone element
+    for zone in root.findall('.//nx:FareZone', ns):
+        # Extract the Name (e.g., Coventry)
+        name_elem = zone.find('nx:Name', ns)
+        name = name_elem.text if name_elem is not None else "Unknown"
+        
+        # Extract the ATCO code from ScheduledStopPointRef
+        # This is usually in the 'ref' attribute
+        stop_ref = zone.find('.//nx:ScheduledStopPointRef', ns)
+        atco_code = stop_ref.get('ref') if stop_ref is not None else "No ATCO"
+        
+        zone_data.append({
+            'city_name': name,
+            'atco_code': atco_code
+        })
+        
+    return zone_data
+
+
+# get all the adult single fares
+valid_files = get_valid_files()
+
+# read the list of all cities of interest from cities.txt
+f = open("cities.txt", "r")
+allowed_cities = [line.strip() for line in f.readlines()]
+f.close()
+
+# Now we want to go through every valid file, and check each valid file
+# for fares between any of our cities of interest
+
+for valid_file in valid_files:
+    tree = etree.parse("NATX_2025_11_05/" + valid_file) 
+    root = tree.getroot()
+
+    # now we need to check all stops on this route to see if they 
+    # match any of our cities. Basically check if a stop name contains
+    # any of our cities
+    chosen_cities = []
+    route_cities = extract_all_cities(root)
+    for rc in route_cities:
+        for ac in allowed_cities:
+            if ac.lower() in rc["city_name"].lower():
+                chosen_cities.append(
+                    {
+                        "city_name":ac.lower(),
+                        "atco": rc["atco_code"]
+                    }
+                )
+
+
+    print(chosen_cities)
+
+    # now for every combination of these chosen cities work out fares between them
+
+
+
+#print(valid_files[0])
+#print(extract_all_cities(root))
+
+
 # Test with your Coventry to Birmingham IDs
-print(get_fare('atco:43000005002', 'atco:43002103108'))
+#print(get_fare('atco:43000005002', 'atco:43002103108'))
