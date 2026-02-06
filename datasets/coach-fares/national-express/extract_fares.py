@@ -3,7 +3,7 @@ from get_valid_files import get_valid_files
 
 ns = {'nx': 'http://www.netex.org.uk/netex'}
 
-def get_zone_for_stop(stop_id):
+def get_zone_for_stop(stop_id, root):
     # get the farezone ID for a given stop. This uses the 'atco.....'
     xpath = f"//nx:FareZone[nx:members/nx:ScheduledStopPointRef[@ref='{stop_id}']]"
     zone = root.xpath(xpath, namespaces=ns)
@@ -11,21 +11,24 @@ def get_zone_for_stop(stop_id):
         return zone[0].get('id')
     return None
 
-def get_fare(origin_naptan, dest_naptan):
+def get_fare(origin_naptan, dest_naptan, root):
     # 1. Map the naptans to fare zones
-    origin_zone = get_zone_for_stop(origin_naptan)
-    dest_zone = get_zone_for_stop(dest_naptan)
+    origin_zone = get_zone_for_stop(origin_naptan, root)
+    dest_zone = get_zone_for_stop(dest_naptan, root)
     
     if not origin_zone or not dest_zone:
         return f"Could not find zones for stops: {origin_naptan} -> {dest_naptan}"
+    
+    #print(f"DEBUG: origin_zone='{origin_zone}', dest_zone='{dest_zone}'")
 
     # 2. Get DistanceMatrixElement ID from the zone ids
     xpath_query = (
-        f"//nx:DistanceMatrixElement["
-        f"nx:StartTariffZoneRef[@ref='{origin_zone}'] and "
-        f"nx:EndTariffZoneRef[@ref='{dest_zone}']]"
+        f'//nx:DistanceMatrixElement['
+        f'nx:StartTariffZoneRef[@ref="{origin_zone}"] and '
+        f'nx:EndTariffZoneRef[@ref="{dest_zone}"]]'
     )
     element = root.xpath(xpath_query, namespaces=ns)
+    #print(f"DEBUG: origin_zone='{origin_zone}', dest_zone='{dest_zone}'")
     
     if not element:
         return f"No route found between zones {origin_zone} and {dest_zone}"
@@ -34,7 +37,7 @@ def get_fare(origin_naptan, dest_naptan):
 
     # 3. Find the Cell that links this DistanceMatrixElement to a price
     # In your XML, the Cell contains a DistanceMatrixElementPrice which points to our ID
-    cell_query = f"//nx:Cell[.//nx:DistanceMatrixElementRef[@ref='{element_id}']]"
+    cell_query = f'//nx:Cell[.//nx:DistanceMatrixElementRef[@ref="{element_id}"]]'
     cell = root.xpath(cell_query, namespaces=ns)
     
     if not cell:
@@ -48,11 +51,11 @@ def get_fare(origin_naptan, dest_naptan):
     price_ref_id = price_ref_elem[0].get('ref')
     
     # 5. Finally, find the GeographicalIntervalPrice with that ID and get the Amount
-    amount_query = f"//nx:GeographicalIntervalPrice[@id='{price_ref_id}']/nx:Amount"
+    amount_query = f'//nx:GeographicalIntervalPrice[@id="{price_ref_id}"]/nx:Amount'
     amount = root.xpath(amount_query, namespaces=ns)
     
     if amount:
-        return f"Fare: £{amount[0].text}"
+        return amount[0].text
     
     return "Price ID found, but no <Amount> tag exists for it."
 
@@ -101,7 +104,9 @@ for valid_file in valid_files:
     # any of our cities
     chosen_cities = []
     route_cities = extract_all_cities(root)
+    
     for rc in route_cities:
+        #print(rc["city_name"])
         for ac in allowed_cities:
             if ac.lower() in rc["city_name"].lower():
                 chosen_cities.append(
@@ -112,9 +117,13 @@ for valid_file in valid_files:
                 )
 
 
-    print(chosen_cities)
+    #print(chosen_cities)
 
     # now for every combination of these chosen cities work out fares between them
+    for i, city in enumerate(chosen_cities):
+        for j in range(i+1, len(chosen_cities)):
+            fare = get_fare(city["atco"].strip(), chosen_cities[j]["atco"].strip(), root)
+            #print("Fare between " + city["city_name"] + " and " + chosen_cities[j]["city_name"] + " is £" + str(fare))
 
 
 
