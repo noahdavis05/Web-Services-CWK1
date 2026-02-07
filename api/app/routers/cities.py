@@ -15,7 +15,12 @@ router = APIRouter(
 @router.post("/", response_model=schemas.CityRead, status_code=201)
 def create_new_city(city: schemas.CityCreate, db: Session = Depends(get_db)):
     """
-    # Create a new City
+    # Add a new city 
+
+    - **name**: City Name - Must be Unique. Example - "Leeds".
+    - **latitude/longitude**: Latitude and Longitude of the city..
+    
+    *Returns the created city object including its database-assigned ID.*
     """
     db_city = models.City(**city.model_dump())
     db.add(db_city)

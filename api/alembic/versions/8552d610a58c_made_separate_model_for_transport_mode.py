@@ -1,8 +1,8 @@
-"""Normalised database models with cities and stations
+"""Made separate model for transport mode
 
-Revision ID: dfb933c4858f
+Revision ID: 8552d610a58c
 Revises: 
-Create Date: 2026-02-07 19:03:38.195206
+Create Date: 2026-02-07 21:53:06.119856
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'dfb933c4858f'
+revision: str = '8552d610a58c'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -29,6 +29,12 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_cities_id'), 'cities', ['id'], unique=False)
+    op.create_table('transport_modes',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_transport_modes_id'), 'transport_modes', ['id'], unique=False)
     op.create_table('stations',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
@@ -39,13 +45,14 @@ def upgrade() -> None:
     op.create_index(op.f('ix_stations_id'), 'stations', ['id'], unique=False)
     op.create_table('routes',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('travel_mode', sa.String(), nullable=False),
     sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('notes', sa.String(), nullable=True),
     sa.Column('origin_station_id', sa.Integer(), nullable=False),
     sa.Column('destination_station_id', sa.Integer(), nullable=False),
+    sa.Column('transport_mode_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['destination_station_id'], ['stations.id'], ),
     sa.ForeignKeyConstraint(['origin_station_id'], ['stations.id'], ),
+    sa.ForeignKeyConstraint(['transport_mode_id'], ['transport_modes.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_routes_id'), 'routes', ['id'], unique=False)
@@ -59,6 +66,8 @@ def downgrade() -> None:
     op.drop_table('routes')
     op.drop_index(op.f('ix_stations_id'), table_name='stations')
     op.drop_table('stations')
+    op.drop_index(op.f('ix_transport_modes_id'), table_name='transport_modes')
+    op.drop_table('transport_modes')
     op.drop_index(op.f('ix_cities_id'), table_name='cities')
     op.drop_table('cities')
     # ### end Alembic commands ###

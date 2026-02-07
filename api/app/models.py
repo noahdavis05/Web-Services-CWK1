@@ -10,17 +10,18 @@ class Route(Base):
     __tablename__ = "routes"
 
     id = Column(Integer, primary_key=True, index=True)
-    travel_mode = Column(String, nullable=False)
     price = Column(Numeric(10,2), nullable=False)
     notes = Column(String, nullable=True)
 
     # foreign keys
     origin_station_id = Column(Integer, ForeignKey("stations.id"), nullable=False)
     destination_station_id = Column(Integer, ForeignKey("stations.id"), nullable=False)
+    transport_mode_id = Column(Integer, ForeignKey("transport_modes.id"), nullable=False)
 
     # relationships
     origin_station = relationship("Station", foreign_keys=[origin_station_id], back_populates="routes_starting")
     destination_station = relationship("Station", foreign_keys=[destination_station_id], back_populates="routes_ending")
+    transport_mode = relationship("TransportMode", back_populates="routes")
 
 class Station(Base):
     __tablename__ = "stations"
@@ -45,3 +46,11 @@ class City(Base):
     longitude = Column(Numeric(10, 6), nullable=False)
 
     stations = relationship("Station", back_populates="city")
+
+class TransportMode(Base):
+    __tablename__ = "transport_modes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+
+    routes = relationship("Route", back_populates="transport_mode")

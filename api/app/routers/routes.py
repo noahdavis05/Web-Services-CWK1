@@ -25,12 +25,15 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
     # check if the start and end stations exist
     origin_station = db.query(models.Station).filter(models.Station.id == route.origin_station_id).first()
     destination_station = db.query(models.Station).filter(models.Station.id == route.destination_station_id).first()
+    transport_mode = db.query(models.TransportMode).filter(models.TransportMode.id == route.transport_mode_id).first()
 
     if not origin_station:
         raise HTTPException(status_code=404, detail="Origin station not found") 
     if not destination_station:
         raise HTTPException(status_code=404, detail="Destination Station not found")
-    
+    if not transport_mode:
+        raise HTTPException(status_code=404, detail="Transport Mode not found")
+
     db_route = models.Route(**route.model_dump())
     db.add(db_route)
     db.commit()
@@ -43,3 +46,15 @@ def get_all_routes(db: Session = Depends(get_db)):
     # Get all travel routes
     """
     return db.query(models.Route).all()
+
+@router.get("/{route_id}", response_model=schemas.RouteRead)
+def get_route_by_id(route_id: int, db: Session = Depends(get_db)):
+    """
+    Get Route by ID
+    """
+    route = db.query(models.Route).filter(models.Route.id == route_id).first()
+
+    if not route:
+        raise HTTPException(status_code=404, detail="Route not found")
+
+    return route
