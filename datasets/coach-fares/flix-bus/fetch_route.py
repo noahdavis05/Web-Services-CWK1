@@ -18,7 +18,7 @@ def get_flixbus_fare_v4(origin_city, destination_city, date):
     params = {
         "from_city_id": from_id,
         "to_city_id": to_id,
-        "departure_date": date, # Format: DD.MM.YYYY
+        "departure_date": date, 
         "products": json.dumps({"adult": 1}),
         "currency": "GBP",
         "locale": "en_GB",
@@ -35,15 +35,16 @@ def get_flixbus_fare_v4(origin_city, destination_city, date):
             #print(trip)
             results = trip.get('results', {})
             for journey_id, details in results.items():
-                departure_id = details["departure"]["station_id"]
-                arrival_id = details["arrival"]["station_id"]
-                price = details["price"]["total_with_platform_fee"]
-                res = {
-                    "origin_station_id":departure_id,
-                    "destination_station_id":arrival_id,
-                    "price":price
-                }
-                all_prices.append(res)
+                if details.get('transfer_type_key') == 'direct':
+                    departure_id = details["departure"]["station_id"]
+                    arrival_id = details["arrival"]["station_id"]
+                    price = details["price"]["total_with_platform_fee"]
+                    res = {
+                        "origin_station_id":departure_id,
+                        "destination_station_id":arrival_id,
+                        "price":price
+                    }
+                    all_prices.append(res)
                 
         
         final_prices = []
@@ -84,11 +85,5 @@ def get_flixbus_uuid(city_name):
                 return flix_cities[0]['id']
     return None
 
-# Test: London to Bath
-#price = get_flixbus_fare_v4("40dfdfd8-8646-11e6-9066-549f350fcb0c", "235da35f-2333-4a86-892f-79b7b459d877", "07.02.2026")
-#print(price)
-
-
-price = get_flixbus_fare_v4("Leeds", "Bristol", "28.02.2026")
-#print(price)
+price = get_flixbus_fare_v4("Bath", "Nottingham", "28.02.2026")
 pprint(price)
