@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from decimal import Decimal
 from typing import Optional
 
@@ -7,6 +7,11 @@ class CityBase(BaseModel):
     name: str 
     latitude: Decimal = Field(..., max_digits=10, decimal_places=6)
     longitude: Decimal = Field(..., max_digits=10, decimal_places=6)
+
+    @field_validator('name')
+    @classmethod
+    def force_lowercase(cls, v: str) -> str:
+        return v.lower()
 
 class CityCreate(CityBase):
     pass

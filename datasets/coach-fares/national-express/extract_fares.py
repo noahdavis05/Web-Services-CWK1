@@ -123,7 +123,7 @@ for valid_file in valid_files:
     for i, city in enumerate(chosen_cities):
         for j in range(i+1, len(chosen_cities)):
             fare = get_fare(city["atco"].strip(), chosen_cities[j]["atco"].strip(), root)
-            #print("Fare between " + city["city_name"] + " and " + chosen_cities[j]["city_name"] + " is £" + str(fare))
+            print("Fare between " + city["city_name"] + " and " + chosen_cities[j]["city_name"] + " is £" + str(fare))
 
 
 

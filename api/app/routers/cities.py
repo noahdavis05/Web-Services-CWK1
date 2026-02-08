@@ -17,7 +17,7 @@ def create_new_city(city: schemas.CityCreate, db: Session = Depends(get_db)):
     """
     # Add a new city 
 
-    - **name**: City Name - Must be Unique. Example - "Leeds".
+    - **name**: City Name - Must be Unique. Example - "Leeds" - all cities are made fully lowercase.
     - **latitude/longitude**: Latitude and Longitude of the city..
     
     *Returns the created city object including its database-assigned ID.*

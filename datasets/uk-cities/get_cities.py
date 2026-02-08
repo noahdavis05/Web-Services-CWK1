@@ -1,4 +1,5 @@
 import pandas as pd
+import requests
 
 cities_df = pd.read_csv("data/ukcities.csv")
 
@@ -26,8 +27,14 @@ for row in largest_cities.itertuples():
         }
     )
 
-# TEMP
-# write all cities to a text file
-with open("data/cities.txt", "w") as f:
-    for city in cities:
-        f.write(city["name"] + "\n")
+
+# send requests to the DB to add each city to the DB
+"""
+ENDPOINT = "http://127.0.0.1:8000/city/"
+for city in cities:
+    response = requests.post(ENDPOINT, json=city)
+    if response.status_code == 201:
+        print("Added succesfully")
+    else:
+        print("Error")
+"""
