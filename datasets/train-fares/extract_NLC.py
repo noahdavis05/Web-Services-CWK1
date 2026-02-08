@@ -35,7 +35,7 @@ def get_clean_station_nlc(loc_path, search_term):
                             "crs": crs,
                             "master_nlc": fare_group if fare_group else nlc
                         })
-    print(valid_results)
+    #print(valid_results)
     return valid_results
 
 

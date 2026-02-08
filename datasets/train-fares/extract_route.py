@@ -1,115 +1,117 @@
+import os
+import requests
+import csv
 from extract_NLC import get_all_codes
 
+# --- CONFIGURATION ---
+BASE_URL = "http://127.0.0.1:8000"
+FFL_PATH = "fares_data/RJFAF658.FFL"
+OUTPUT_CSV = "extracted_fares2.csv"
+CITIES_FILE = "cities.txt"
+
 TICKET_TYPES = {
-    "CDS":"Off Peak Single",
-    "SDS":"Anytime Single",
-    "SOS":"Anytime Single"
+    "CDS": "Off Peak Single",
+    "SDS": "Anytime Single",
+    "SOS": "Anytime Single"
 }
 
+# --- STEP 1: LOAD CITIES & CODES ---
+print("Step 1: Loading city NLC codes...")
+with open(CITIES_FILE, "r") as f:
+    city_names = [line.strip() for line in f.readlines()]
 
-def find_routes_efficient(ffl_path, start_codes, end_codes):
-    routes = []
+# all_city_data stores { 'city_name': { 'NLC_CODE': 'Station Name' } }
+all_city_data = {}
+all_allowed_nlcs = set()
+
+for city in city_names:
+    codes = get_all_codes(city)
+    # Store as a dict for O(1) station name lookup later
+    all_city_data[city.lower()] = {c[0]: c[1] for c in codes}
+    for code, name in codes:
+        all_allowed_nlcs.add(code)
+
+# --- STEP 2: SINGLE-PASS FILE INDEXING ---
+# Instead of searching the file 20,000 times, we read it ONCE.
+print(f"Step 2: Indexing {FFL_PATH} (this may take a minute)...")
+flows = {}  # flow_id -> (origin_nlc, dest_nlc)
+prices = {} # flow_id -> list of (price, ticket_type)
+
+with open(FFL_PATH, 'r', encoding='latin-1') as f:
+    for line in f:
+        # RF Records define the 'Flow' (Journey)
+        if line.startswith("RF"):
+            origin = line[2:6]
+            destination = line[6:10]
+            # Only index flows where BOTH stations are in our target cities
+            if origin in all_allowed_nlcs and destination in all_allowed_nlcs:
+                flow_id = line[42:49].strip()
+                flows[flow_id] = (origin, destination)
+        
+        # RT Records define the 'Fare' (Price) for a Flow
+        elif line.startswith("RT"):
+            flow_id = line[2:9].strip()
+            if flow_id in flows:
+                t_type = line[9:12]
+                if t_type in TICKET_TYPES:
+                    price_val = int(line[12:20]) / 100.0
+                    if flow_id not in prices:
+                        prices[flow_id] = []
+                    prices[flow_id].append((price_val, TICKET_TYPES[t_type]))
+
+# --- STEP 3: MATCHING & CSV EXPORT ---
+print(f"Step 3: Calculating cheapest routes and saving to {OUTPUT_CSV}...")
+
+# Open CSV and write header if empty
+file_exists = os.path.isfile(OUTPUT_CSV) and os.stat(OUTPUT_CSV).st_size > 0
+f_out = open(OUTPUT_CSV, "a", encoding='utf-8')
+if not file_exists:
+    f_out.write("origin_city,destination_city,origin_station,destination_station,price\n")
+
+for i, city_a in enumerate(city_names):
+    city_a = city_a.lower()
+    a_lookup = all_city_data[city_a] # {NLC: Name}
     
-    # Convert lists to Sets for O(1) lookup speed
-    start_set = set(start_codes)
-    end_set = set(end_codes)
+    print(f"Processing {city_a} ({i+1}/{len(city_names)})...")
+    
+    for j in range(i + 1, len(city_names)):
+        city_b = city_names[j].lower()
+        b_lookup = all_city_data[city_b] # {NLC: Name}
+        
+        pair_fares = []
 
-    with open(ffl_path, 'r', encoding='latin-1') as f:
-        for line in f:
-            # We only care about 'RF' records
-            if line[0:2] == "RF":
-                origin = line[2:6]
-                destination = line[6:10]
+        # Find all indexed flows that link these two specific cities
+        for flow_id, (org, dest) in flows.items():
+            # Check A -> B or B -> A
+            is_fwd = (org in a_lookup and dest in b_lookup)
+            is_bwd = (org in b_lookup and dest in a_lookup)
 
-                # Check if this line matches ANY combination in either direction
-                # (Forward: Taunton -> Bath | Reverse: Bath -> Taunton)
-                if (origin in start_set and destination in end_set):      
-                    routes.append((line.strip(), origin, destination, line[42:49].strip()))
-                elif (origin in end_set and destination in start_set):
-                    routes.append((line.strip(), destination, origin, line[42:49].strip()))
+            if (is_fwd or is_bwd) and flow_id in prices:
+                for price, t_name in prices[flow_id]:
+                    # Map NLC back to station names
+                    o_name = a_lookup.get(org) or b_lookup.get(org)
+                    d_name = b_lookup.get(dest) or a_lookup.get(dest)
                     
-    return routes
+                    pair_fares.append({
+                        "o_stat": o_name,
+                        "d_stat": d_name,
+                        "price": price,
+                        "org_city": city_a if is_fwd else city_b,
+                        "dst_city": city_b if is_fwd else city_a
+                    })
 
-def extract_fares(ffl_path, routes):
-    # iterate over our routes and get the fare codes
-    route_codes = set()
-    for r in routes:
-        flow_id = r[0][42:49].strip()
-        #print(flow_id)
-        route_codes.add(flow_id)
+        if pair_fares:
+            # Keep only the absolute cheapest
+            cheapest = sorted(pair_fares, key=lambda x: x['price'])[0]
+            
+            # Write Forwards
+            f_out.write(f"{cheapest['org_city']},{cheapest['dst_city']},{cheapest['o_stat']},{cheapest['d_stat']},{cheapest['price']}\n".lower())
+            
+            # Write Backwards (Mirroring your logic to ensure both directions exist)
+            f_out.write(f"{cheapest['dst_city']},{cheapest['org_city']},{cheapest['d_stat']},{cheapest['o_stat']},{cheapest['price']}\n".lower())
 
-    # now iterate over all RT records and get prices
-    results = []
-    with open(ffl_path, 'r', encoding='latin-1') as f:
-        for line in f:
-            if line.startswith("RT"):
-                # check if the code is in our route_codes set
-                if line[2:9] in route_codes:
-                    # now get the ticket type
-                    ticket_type = line[9:12]
-                    if ticket_type == "CDS" or ticket_type == "SDS" or ticket_type == "SOS": # of peak day single
-                        price_string = line[12:20]
-                        price = int(price_string) / 100.0
-                        results.append((price, ticket_type, line[2:9])) # the price, ticket type, and the route code
+    # Periodically save to disk
+    f_out.flush()
 
-    return results
-
-
-def inter_city_routes(city1, city2):
-    # codes with their station names
-    city1_c = get_all_codes(city1)
-    city2_c = get_all_codes(city2)
-
-    # make copies of these without station names
-    city1_codes = []
-    for code in city1_c:
-        city1_codes.append(code[0])
-
-    city2_codes = []
-    for code in city2_c:
-        city2_codes.append(code[0])
-
-
-    # get all routes between cities
-    all_routes = find_routes_efficient("fares_data/RJFAF658.FFL", city1_codes, city2_codes)
-
-    # all routes contains
-
-    print(all_routes)
-
-    prices = extract_fares("fares_data/RJFAF658.FFL", all_routes)
-
-    # now go through the prices and make full journey
-    for price in prices:
-        ticket_price = price[0]
-        ticket_type = TICKET_TYPES[price[1]]
-        ticket_route = price[2]
-
-        # now get the route with these tickets
-        destination = ""
-        origin = ""
-        for route in all_routes:
-            if route[3] == ticket_route:
-                # this is our route for this journey - now we can work out which stations we go from
-                origin_code = route[1]
-                destination_code = route[2]
-
-                # iterate through city codes - need to check both destinations in city1_c and city2_c as routes can be forwards or backwards
-                for c in city1_c:
-                    if origin_code == c[0]:
-                        origin = c[1]
-                    if destination_code == c[0]:
-                        destination = c[1]
-
-                for c in city2_c:
-                    if origin_code == c[0]:
-                        origin = c[1]
-                    if destination_code == c[0]:
-                        destination = c[1]
-
-        print("Ticket from", origin, "to", destination, "is £" + str(ticket_price), "for a ", ticket_type, "ticket")
-
-
-
-
-inter_city_routes("Coventry", "Birmingham")
+f_out.close()
+print("Done! All routes extracted.")
