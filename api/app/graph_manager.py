@@ -1,0 +1,48 @@
+# This is a singleton class which will give endpoints direct access
+# to the adjacency list of all nodes. This will ensure that endpoints
+# don't have to fetch all possible routes between nodes.
+
+class GraphManager:
+    _instance = None 
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(GraphManager, cls).__new__(cls)
+            cls._instance.graph = {}
+            cls._instance.last_updated = None
+            cls._instance.is_loaded = False
+        
+        return cls._instance
+    
+    def build_graph(self, routes_from_db):
+        """
+        Takes all routes between cities from the database and builds adjacency graph between them
+        
+        :param self: Description
+        :param routes_from_db: Description
+        """
+        new_graph = {}
+
+        for route in routes_from_db:
+            # we need to work out the origin city, destination city, price, origin station, destinatino station
+            try:
+                origin_city = route.origin_station.city.name.lower()
+                dest_city = route.destination_station.city.name.lower()
+                
+                edge_data = {
+                    "destination_city": dest_city,
+                    "origin_station": route.origin_station.name.lower(),
+                    "destination_station": route.destination_station.name.lower(),
+                    "price": float(route.price),
+                    "notes": route.notes,
+                    "mode": route.transport_mode.name.lower() if route.transport_mode else "unknown"
+                }
+
+                if origin_city not in new_graph:
+                    new_graph[origin_city] = []
+                
+                new_graph[origin_city].append(edge_data)
+            except AttributeError as e:
+                continue
+
+        self.graph = new_graph
