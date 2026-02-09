@@ -1,10 +1,9 @@
 import requests
 import json
 from pprint import pprint
+import os
 
-def get_flixbus_fare_v4(origin_city, destination_city, date):
-    from_id = get_flixbus_uuid(origin_city)
-    to_id = get_flixbus_uuid(destination_city)
+def get_flixbus_fare_v4(from_id, to_id, origin_city, destination_city, date):
     url = "https://global.api.flixbus.com/search/service/v4/search"
     
     # These headers are essential to avoid being blocked
@@ -59,7 +58,37 @@ def get_flixbus_fare_v4(origin_city, destination_city, date):
                 "price":price["price"]
             }
             final_prices.append(final_price)
-        return final_prices
+        
+        # now we need to work out which result to add to the database.
+        # for each route (e.g. each starting and ending station pair)
+        # we will calculate the mean price. We will return the cheapest mean route
+
+        unique_routes = {}
+
+        for route in final_prices:
+            pair = (route['origin_station'], route['destination_station'])
+            if pair in unique_routes:
+                unique_routes[pair]['records'] += 1
+                unique_routes[pair]['average'] = ((unique_routes[pair]['average'] * (unique_routes[pair]['records'] - 1)) + route['price']) / unique_routes[pair]['records']
+            else:
+                unique_routes[pair] = {
+                    "average" : route['price'],
+                    "records" : 1
+                }
+        
+        # choose route with lowest average
+        best_route = min(unique_routes.items(), key=lambda item: item[1]['average'])
+        final_price = {
+            "origin_city": origin_city,
+            "destination_city": destination_city,
+            "origin_station": best_route[0][0],
+            "destination_station": best_route[0][1],
+            "price": best_route[1]['average']
+        }
+        print(final_prices)
+        print(unique_routes)
+        print(final_price)
+        return final_price
     return None
 
 
@@ -85,5 +114,30 @@ def get_flixbus_uuid(city_name):
                 return flix_cities[0]['id']
     return None
 
-price = get_flixbus_fare_v4("Bath", "Nottingham", "28.02.2026")
-pprint(price)
+OUTPUT_CSV = "extracted_fares.csv"
+# write the headers to the csv file
+file_exists = os.path.isfile(OUTPUT_CSV) and os.stat(OUTPUT_CSV).st_size > 0
+f_out = open(OUTPUT_CSV, "a", encoding='utf-8')
+if not file_exists:
+    f_out.write("origin_city,destination_city,origin_station,destination_station,price\n")
+f_out.close()
+
+# iterate over the list of allowed cities
+f = open("cities.txt", "r")
+allowed_cities = [line.strip() for line in f.readlines()]
+f.close()
+for city1, i in enumerate(allowed_cities):
+    for j in range(i+1, len(allowed_cities)):
+        city2 = allowed_cities[j]
+
+        # find prices between cities
+        origin_id = get_flixbus_uuid(city1)
+        destination_id = get_flixbus_uuid(city2)
+        if not origin_id or not destination_id:
+            continue # if city isn't used by flixbus
+
+        price_forward = get_flixbus_fare_v4(origin_id, destination_id, city1, city2, "28.03.2026")
+        price_backward = get_flixbus_fare_v4(destination_id, origin_id, city2, city1, "28.03.2026")
+
+        # write the routes to a csv file
+        f_out = open(OUTPUT_CSV, "a", encoding='utf-8')
