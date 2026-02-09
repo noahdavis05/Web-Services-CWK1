@@ -18,8 +18,8 @@ class GraphManager:
         """
         Takes all routes between cities from the database and builds adjacency graph between them
         
-        :param self: Description
-        :param routes_from_db: Description
+        :param self: 
+        :param routes_from_db: Array of Route Models from them
         """
         new_graph = {}
 

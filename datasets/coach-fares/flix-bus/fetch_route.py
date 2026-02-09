@@ -2,6 +2,7 @@ import requests
 import json
 from pprint import pprint
 import os
+from route_extraction import get_all_routes
 
 def get_flixbus_fare_v4(from_id, to_id, origin_city, destination_city, date):
     url = "https://global.api.flixbus.com/search/service/v4/search"
@@ -123,21 +124,25 @@ if not file_exists:
 f_out.close()
 
 # iterate over the list of allowed cities
-f = open("cities.txt", "r")
-allowed_cities = [line.strip() for line in f.readlines()]
-f.close()
-for city1, i in enumerate(allowed_cities):
-    for j in range(i+1, len(allowed_cities)):
-        city2 = allowed_cities[j]
 
-        # find prices between cities
-        origin_id = get_flixbus_uuid(city1)
-        destination_id = get_flixbus_uuid(city2)
-        if not origin_id or not destination_id:
-            continue # if city isn't used by flixbus
+all_routes = get_all_routes()
 
-        price_forward = get_flixbus_fare_v4(origin_id, destination_id, city1, city2, "28.03.2026")
-        price_backward = get_flixbus_fare_v4(destination_id, origin_id, city2, city1, "28.03.2026")
+for route in all_routes:
+    city1 = route[0]
+    city2 = route[1]
 
-        # write the routes to a csv file
-        f_out = open(OUTPUT_CSV, "a", encoding='utf-8')
+    # find prices between cities
+    origin_id = get_flixbus_uuid(city1)
+    destination_id = get_flixbus_uuid(city2)
+    if not origin_id or not destination_id:
+        # if cities aren't being used by flixbus
+        # however, this shouldn't be the case
+        # as i have extracted all the routes from dataset
+        continue 
+
+    price = get_flixbus_fare_v4(origin_id, destination_id, city1, city2, "26.03.2026")
+
+    # write the routes to a csv file
+    f_out = open(OUTPUT_CSV, "a", encoding='utf-8')
+    f_out.write(f'{price['origin_city']},{price['destination_city']},{price['origin_station']},{price['destination_station']},{price['price']}\n')
+    f_out.close()
