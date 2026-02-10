@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy.orm import Session, joinedload
 
-from .routers import routes, cities, stations, transport_modes
+from .routers import routes, cities, stations, transport_modes, journeys
 from .database import SessionLocal
-from .graph_manager import GraphManager
+from .utils.graph_manager import GraphManager
 from . import models
 
 # on startup we load our graph of all routes into singleton class
@@ -42,3 +42,4 @@ app.include_router(routes.router)
 app.include_router(cities.router)
 app.include_router(stations.router)
 app.include_router(transport_modes.router)
+app.include_router(journeys.router)

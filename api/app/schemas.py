@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, List
 
 # CITY SCHEMAS
 class CityBase(BaseModel):
@@ -79,4 +79,16 @@ class RouteRead(RouteBase):
     destination_station: StationRead
     transport_mode: TransportModeRead
     
+    model_config = ConfigDict(from_attributes=True)
+
+# JOURNEY SCHEMAS - This is the result of our Dijkstra. We find the collection of cheapest routes
+class JourneyRequest(BaseModel):
+    origin_station_id: int
+    destination_station_id: int 
+    
+
+class JourneyRead(BaseModel):
+    total_price: Decimal
+    path: List[RouteRead]
+
     model_config = ConfigDict(from_attributes=True)

@@ -26,16 +26,13 @@ class GraphManager:
         for route in routes_from_db:
             # we need to work out the origin city, destination city, price, origin station, destinatino station
             try:
-                origin_city = route.origin_station.city.name.lower()
-                dest_city = route.destination_station.city.name.lower()
+                origin_city = route.origin_station.city.id
+                dest_city = route.destination_station.city.id
                 
                 edge_data = {
+                    "route_id": route.id,
                     "destination_city": dest_city,
-                    "origin_station": route.origin_station.name.lower(),
-                    "destination_station": route.destination_station.name.lower(),
-                    "price": float(route.price),
-                    "notes": route.notes,
-                    "mode": route.transport_mode.name.lower() if route.transport_mode else "unknown"
+                    "price": float(route.price)
                 }
 
                 if origin_city not in new_graph:
