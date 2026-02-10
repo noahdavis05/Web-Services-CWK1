@@ -1,4 +1,5 @@
 import os
+from itertools import combinations
 import xml.etree.ElementTree as ET
 
 # we will extract the routes between valid cities of ours.
@@ -20,7 +21,7 @@ def get_valid_routes(filepath, allowed_cities):
         return []
 
     # prioritize LocalityQualifier as it usually contains the city instead of stop name
-    stop_to_city = {}
+    cities = []
     for stop in root.findall('.//txc:AnnotatedStopPointRef', ns):
         stop_ref = stop.find('txc:StopPointRef', ns).text
         
@@ -29,32 +30,23 @@ def get_valid_routes(filepath, allowed_cities):
             city_node = stop.find('txc:LocalityName', ns)
             
         if city_node is not None:
-            stop_to_city[stop_ref] = city_node.text
+            cities.append(city_node.text)
 
-    # extract Route Links and filter by allowed cities
-    valid_routes = []
-    
-    # Iterate through all RouteSections 
-    for section in root.findall('.//txc:RouteSection', ns):
-        current_route = []
-        links = section.findall('txc:RouteLink', ns)
-        
-        for link in links:
-            from_ref = link.find('txc:From/txc:StopPointRef', ns).text
-            to_ref = link.find('txc:To/txc:StopPointRef', ns).text
-            
-            from_city = stop_to_city.get(from_ref)
-            to_city = stop_to_city.get(to_ref)
+    #print(cities)
+    final_cities = []
+    for city in cities:
+        for c in allowed_cities:
+            if c in city or city in c: # check either way - for example newcaste upon tyne and newcastle
+                final_cities.append(c)
 
+    # now find all possible routes between final_cities
+    routes = [tuple(sorted(pair)) for pair in combinations(final_cities, 2)]
+    routes = list(set(routes))
+    # add both directions
+    routes = [(a, b) for (a, b) in routes] + [(b, a) for (a, b) in routes]
+    return routes
 
-            
-            # check both cities are valid
-            if from_city in allowed_cities and to_city in allowed_cities:
-                if from_city != to_city:
-                    valid_routes.append((from_city, to_city))
-                
-    # remove duplicates
-    return list(set(valid_routes))
+   # now find all possible combinations between any two cities
 
 def get_all_routes():
     # get our list of allowed cities from cities.txt
@@ -76,3 +68,4 @@ def get_all_routes():
     all_possible_routes = list(set(all_possible_routes))
 
     return all_possible_routes
+
