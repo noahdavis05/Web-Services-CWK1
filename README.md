@@ -13,6 +13,22 @@ This API finds the estimated cheapest route between any of the top 200 largest U
 6. If the database doesn't exist/tables don't exist. Run `alembic upgrade head`.
 7. Run FastAPI application via uvicorn. `uvicorn app.main:app --reload`
 
+### Datasets
+1. Set the correct `DATABASE_URL` in the .env in the `api` directory.
+2. Run the API - See above.
+3. Go to the URL `127.0.0.1:8000/docs#/`. 
+4. Find the **Travel Routes** section and test the **POST** endpoint. Create firstly a travel method 'coach' and secondly a travel method 'train'.
+5. Open a new terminal and navigate to `/datasets/uk-cities`.
+6. Activate venv `source venv/bin/activate`.
+7. Run the script get_cities.py `python3 get_cities.py`. This will add all cities to the database.
+8. Deactivate the venv `deactivate`, and navigate to `datasets/train-fares`.
+9. Activate the venv, and run the script `upload_routes.py`. `python3 upload_routes.py`.
+10. Deactivate the venv, and navigate to `datasets/coach-fares/flix-bus/`.
+11. Activate the venv, and run script `upload_routes.py`. `python3 upload_routes.py`.
+12. Deactivate the venv and navigate to `/datasets/coach-fares/national-express`.
+13. Activate the venv and run the script `extract_fares.py`. `python3 extract_fares.py`.
+
+
 ## Datasets
 To work out the cheapest route between the UK's 200 largest cities and towns I used all trainlines, national express coaches, and flixbus coaches. Information on the data for these can be found below.
 1. **Trains** - I used the National Rail Data Portal. I made a free account and gained access to the train fares dataset. This provides you with all rail fares between any two stations. This only includes standard ticket prices, not tickets such as advanced singles which are based on demand and not available to the public. My code to extract this can be found in `/datasets/train-fares`. This includes code to get the train prices between all 200 chosen cities into CSV format, and code to upload this to my database through my API.
