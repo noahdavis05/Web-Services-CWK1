@@ -27,6 +27,11 @@ class StationBase(BaseModel):
     name: str 
     city_id: int 
 
+    @field_validator('name')
+    @classmethod
+    def force_lowercase(cls, v: str) -> str:
+        return v.lower()
+
 class StationCreate(StationBase):
     pass
 
@@ -41,6 +46,11 @@ class StationRead(StationBase):
 # TRANSPORT MODE SCHEMAS
 class TransportModeBase(BaseModel):
     name: str
+
+    @field_validator('name')
+    @classmethod
+    def force_lowercase(cls, v: str) -> str:
+        return v.lower()
 
 class TransportModeCreate(TransportModeBase):
     pass

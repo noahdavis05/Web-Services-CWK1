@@ -245,7 +245,7 @@ for fare in unique_fairs.values():
         "destination_station_id": d_stat_id,
         "price": fare["price"],
         "transport_mode_id": 1, 
-        "notes": "Imported from BODS NeTEx"
+        "notes": "National Express Bus"
     }
 
     #print(route_payload)

@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 
 BASE_URL = "http://127.0.0.1:8000"
-TRANSPORT_MODE_ID = 2  # Set to 2 for Train
+TRANSPORT_MODE_ID = 1  # Set to 1 for coach
 
 # 1. Fetch lookups once to minimize API calls
 def get_city_lookup():
@@ -64,7 +64,7 @@ for record in data:
     d_city_name = str(record["destination_city"]).lower().strip()
     o_stat_name = str(record["origin_station"]).lower().strip()
     d_stat_name = str(record["destination_station"]).lower().strip()
-    price = record["price"]
+    price = round(record["price"], 2)
 
     # 2. Get City IDs (Guaranteed to exist per your requirements)
     o_city_id = city_lookup.get(o_city_name)
@@ -86,7 +86,7 @@ for record in data:
             "destination_station_id": d_stat_id,
             "price": float(price),
             "transport_mode_id": TRANSPORT_MODE_ID,
-            "notes": "Imported from Rail Fares Dataset (FFL/TKT)"
+            "notes": "Flix Bus route"
         }
 
         # 5. POST the Route
@@ -94,12 +94,9 @@ for record in data:
             res = requests.post(f"{BASE_URL}/routes/", json=route_payload)
             if res.status_code in [200, 201]:
                 print(f"Route Created: {o_stat_name} -> {d_stat_name} (£{price})")
-            elif res.status_code == 400:
-                # Handle case where route might already exist if you have unique constraints
-                print(f"Route likely already exists: {o_stat_name} -> {d_stat_name}")
             else:
-                print(res.status_code, res.text)
+                print("ERROR", res.status_code, res.text)
         except Exception as e:
             print(f"Error posting route: {e}")
 
-print("Upload process complete.")
+print("Upload process complete.") #24291

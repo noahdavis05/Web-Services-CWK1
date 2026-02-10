@@ -1,9 +1,9 @@
 origin_city,destination_city,origin_station,destination_station,price
 Northampton,Liverpool,Northampton Town Centre,Liverpool (One Bus Station),12.49
 Birmingham,Leeds,Birmingham - Great Charles Street Queensway,Leeds City Bus Station,6.561428571428572
-Bath,London,Bath Bus Station,London Heathrow Airport (Central Bus Station, T2 and T3),6.489999999999999
+Bath,London,Bath Bus Station,London Heathrow Airport (Central Bus Station T2 and T3),6.489999999999999
 Chester,Northampton,Chester Bus Interchange (Stand N),Northampton Town Centre,10.99
-Swindon,London,Regent Circus Swindon (Stop C),London Heathrow Airport (Central Bus Station, T2 and T3),8.24
+Swindon,London,Regent Circus Swindon (Stop C),London Heathrow Airport (Central Bus Station T2 and T3),8.24
 Exeter,Plymouth,Cullompton Bus Stop (Station RD),Plymouth Coach Station,3.99
 Weston-super-Mare,Bristol,Weston super Mare Alexandra Parade,Bristol Bus Station (UK),4.99
 Manchester,Leeds,Manchester (Shudehill Interchange),Leeds City Bus Station,3.990000000000001
@@ -15,29 +15,29 @@ Leeds,Darlington,Leeds City Bus Station,Darlington (Town Hall),5.49
 Sunderland,Manchester,Sunderland Interchange,Manchester (Shudehill Interchange),7.156666666666666
 Coventry,Liverpool,Coventry (Pool Meadow),Liverpool (One Bus Station),6.49
 Sheffield,Cardiff,Sheffield (Meadowhall Interchange),Cardiff North Road (Friary Gardens),12.99
-London,Gloucester,London Heathrow Airport (Central Bus Station, T2 and T3),Gloucester (Transport Hub),10.99
+London,Gloucester,London Heathrow Airport (Central Bus Station T2 and T3),Gloucester (Transport Hub),10.99
 Birmingham,Sheffield,Birmingham - Great Charles Street Queensway,Sheffield (Meadowhall Interchange),5.7042857142857155
 Birmingham,Manchester,Birmingham - Great Charles Street Queensway,Manchester (Moss Lane East),6.49
-Plymouth,London,Plymouth Coach Station,London Heathrow Airport (Central Bus Station, T2 and T3),22.99
+Plymouth,London,Plymouth Coach Station,London Heathrow Airport (Central Bus Station T2 and T3),22.99
 Leeds,Derby,Leeds City Bus Station,Derby,4.99
 Dundee,Edinburgh,Dundee (Overgate Centre - West Marketgait),Edinburgh Bus Station,6.540000000000001
 Stoke-on-Trent,Birmingham,Stoke-on-Trent (Hanley Bus Station),Birmingham - Great Charles Street Queensway,5.090000000000001
 Manchester,Sheffield,Manchester (Shudehill Interchange),Sheffield (Meadowhall Interchange),3.99
 Manchester,Leicester,Manchester (Shudehill Interchange),Leicester St Margarets bus station,6.49
 Dundee,Aberdeen,Dundee (Overgate Centre - West Marketgait),Aberdeen Bus Station,5.72076923076923
-Luton,London,Luton DART Parkway (For Airport),London Heathrow Airport (Central Bus Station, T2 and T3),4.99
+Luton,London,Luton DART Parkway (For Airport),London Heathrow Airport (Central Bus Station T2 and T3),4.99
 Bristol,London,Bristol Bus Station (UK),London Heathrow Airport (Terminal 5),11.204285714285714
 Newport,Swansea,Newport,Swansea University,4.423333333333335
-London,Derby,London Heathrow Airport (Central Bus Station, T2 and T3),Derby,26.99
-Glasgow,London,Glasgow,London Heathrow Airport (Central Bus Station, T2 and T3),39.99
-London,Bath,London Heathrow Airport (Central Bus Station, T2 and T3),Bath Bus Station,6.49
+London,Derby,London Heathrow Airport (Central Bus Station T2 and T3),Derby,26.99
+Glasgow,London,Glasgow,London Heathrow Airport (Central Bus Station T2 and T3),39.99
+London,Bath,London Heathrow Airport (Central Bus Station T2 and T3),Bath Bus Station,6.49
 Glasgow,Edinburgh,Glasgow,Edinburgh Haymarket Station North (Stop HB),4.490000000000001
 Swansea,Bristol,Swansea,Bristol Bus Station (UK),6.035454545454545
 Swindon,Newport,Regent Circus Swindon (Stop C),Newport,7.99
 Glasgow,Aberdeen,Glasgow,Aberdeen Bus Station,7.146249999999998
 Warrington,Liverpool,Warrington Interchange,Liverpool (One Bus Station),3.99
 Leeds,Nottingham,Leeds City Bus Station,Nottingham (Phoenix Park P+R),4.49
-London,Bristol,London Heathrow Airport (Central Bus Station, T2 and T3),Bristol Bus Station (UK),11.790000000000001
+London,Bristol,London Heathrow Airport (Central Bus Station T2 and T3),Bristol Bus Station (UK),11.790000000000001
 Gloucester,Bristol,Gloucester (Transport Hub),Bristol Bus Station (UK),3.99
 Cambridge,Brighton,Cambridge Parkside - Stop 18,Brighton (Preston Park),8.24
 Brighton,Cambridge,Brighton Old Steine S4 (Stop Z),Cambridge (Trumpington Park and Ride),8.073333333333334
@@ -47,40 +47,40 @@ Derby,Leeds,Derby,Leeds City Bus Station,5.489999999999999
 Sunderland,Middlesbrough,Sunderland Interchange,Middlesbrough (Bus Station),3.99
 Middlesbrough,Edinburgh,Middlesbrough (Bus Station),Edinburgh Bus Station,9.74
 Bristol,Newport,Bristol Bus Station (UK),Newport,4.421818181818181
-Cardiff,London,Cardiff North Road (Friary Gardens),London Heathrow Airport (Central Bus Station, T2 and T3),13.454285714285717
+Cardiff,London,Cardiff North Road (Friary Gardens),London Heathrow Airport (Central Bus Station T2 and T3),13.454285714285717
 Newport,Birmingham,Newport,Birmingham - Great Charles Street Queensway,6.24
 Derby,Bradford,Derby,Bradford Interchange,5.989999999999999
 Manchester,Luton,Manchester (Shudehill Interchange),Luton Halfway Avenue,11.99
-London,Sunderland,London Heathrow Airport (Central Bus Station, T2 and T3),Sunderland Interchange,24.49
+London,Sunderland,London Heathrow Airport (Central Bus Station T2 and T3),Sunderland Interchange,24.49
 Stoke-on-Trent,Manchester,Stoke-on-Trent (Hanley Bus Station),Manchester (Moss Lane East),5.99
 Leeds,Glasgow,Leeds City Bus Station,Glasgow,18.99
 Derby,Sheffield,Derby,Sheffield Interchange,4.49
 Aberdeen,Dundee,Aberdeen Bus Station,Dundee (Overgate Centre - West Marketgait),5.72076923076923
 Derby,Leicester,Derby,Leicester St Margarets bus station,4.240000000000001
 Manchester,Middlesbrough,Manchester (Shudehill Interchange),Middlesbrough (Bus Station),6.489999999999999
-Coventry,London,Coventry (Pool Meadow),London Heathrow Airport (Central Bus Station, T2 and T3),7.490000000000001
+Coventry,London,Coventry (Pool Meadow),London Heathrow Airport (Central Bus Station T2 and T3),7.490000000000001
 Plymouth,Exeter,Plymouth Coach Station,Cullompton Bus Stop (Station RD),3.99
 Chester,Birmingham,Chester Bus Interchange (Stand N),Birmingham - Great Charles Street Queensway,7.989999999999999
 Derby,Northampton,Derby,Northampton Town Centre,6.115
 Bristol,Exeter,Bristol Bus Station (UK),Cullompton Bus Stop (Station RD),5.49
 Birmingham,Warrington,Birmingham - Great Charles Street Queensway,Warrington Interchange,5.99
 Dundee,Nottingham,Dundee (Overgate Centre - West Marketgait),Nottingham Broad Marsh Bus Station,22.99
-Leeds,London,Leeds Cultural Stop C,London Heathrow Airport (Central Bus Station, T2 and T3),17.49
+Leeds,London,Leeds Cultural Stop C,London Heathrow Airport (Central Bus Station T2 and T3),17.49
 Birmingham,Liverpool,Birmingham - Great Charles Street Queensway,Liverpool (One Bus Station),6.49
-Swansea,London,Swansea,London Heathrow Airport (Central Bus Station, T2 and T3),15.99
+Swansea,London,Swansea,London Heathrow Airport (Central Bus Station T2 and T3),15.99
 London,Coventry,London Heathrow Airport (Terminal 5),Coventry (Pool Meadow),7.490000000000001
 Manchester,Liverpool,Manchester (Shudehill Interchange),Liverpool (Wavertree Shopping Centre),3.99
 Leeds,Northampton,Leeds City Bus Station,Northampton (Grange Park - Saxon Avenue),9.49
-Gloucester,London,Gloucester (Transport Hub),London Heathrow Airport (Central Bus Station, T2 and T3),11.323333333333332
+Gloucester,London,Gloucester (Transport Hub),London Heathrow Airport (Central Bus Station T2 and T3),11.323333333333332
 Northampton,Derby,Northampton Town Centre,Derby,6.24
 Birmingham,Cardiff,Birmingham - Great Charles Street Queensway,Cardiff North Road (Friary Gardens),8.99
-London,Edinburgh,London Heathrow Airport (Central Bus Station, T2 and T3),Edinburgh Bus Station,31.99
+London,Edinburgh,London Heathrow Airport (Central Bus Station T2 and T3),Edinburgh Bus Station,31.99
 Cardiff,Swansea,Cardiff North Road (Friary Gardens),Swansea University,3.9900000000000015
-London,Cheltenham,London Heathrow Airport (Central Bus Station, T2 and T3),Cheltenham Royal Well Bus Station,6.989999999999999
+London,Cheltenham,London Heathrow Airport (Central Bus Station T2 and T3),Cheltenham Royal Well Bus Station,6.989999999999999
 Sheffield,Derby,Sheffield Interchange,Derby,3.99
 Dundee,Glasgow,Dundee (Overgate Centre - West Marketgait),Glasgow,5.521249999999999
 Birmingham,Oxford,Birmingham - Great Charles Street Queensway,Oxford Bus Station,5.99
-London,Northampton,London Heathrow Airport (Central Bus Station, T2 and T3),Northampton Town Centre,16.99
+London,Northampton,London Heathrow Airport (Central Bus Station T2 and T3),Northampton Town Centre,16.99
 Glasgow,Carlisle,Glasgow,Carlisle (Halston Hotel),6.99
 Birmingham,Preston,Birmingham - Great Charles Street Queensway,Preston Bus Station,12.99
 Sheffield,Bristol,Sheffield (Meadowhall Interchange),Bristol Bus Station (UK),8.49
@@ -90,7 +90,7 @@ Leicester,Derby,Leicester (Fosse Park),Derby,4.1328571428571435
 Swansea,Newport,Swansea,Newport,4.490000000000001
 Bristol,Leeds,Bristol Bus Station (UK),Leeds City Bus Station,8.49
 Aberdeen,Sheffield,Aberdeen Bus Station,Sheffield (Meadowhall Interchange),27.49
-London,Newport,London Heathrow Airport (Central Bus Station, T2 and T3),Newport,13.456666666666669
+London,Newport,London Heathrow Airport (Central Bus Station T2 and T3),Newport,13.456666666666669
 Gloucester,Newport,Gloucester (Transport Hub),Newport,4.49
 Cardiff,Birmingham,Cardiff North Road (Friary Gardens),Birmingham - Great Charles Street Queensway,8.99
 Glasgow,Leeds,Glasgow,Leeds Cultural Stop C,9.49
@@ -98,12 +98,12 @@ Sheffield,Sunderland,Sheffield (Meadowhall Interchange),Sunderland Interchange,1
 Coventry,Stoke-on-Trent,Coventry (Pool Meadow),Stoke-on-Trent (Hanley Bus Station),5.490000000000001
 Middlesbrough,Glasgow,Middlesbrough (Bus Station),Glasgow,10.49
 Liverpool,Leeds,Liverpool (One Bus Station),Leeds City Bus Station,4.99
-Bournemouth,London,Bournemouth,London Heathrow Airport (Central Bus Station, T2 and T3),9.323333333333332
+Bournemouth,London,Bournemouth,London Heathrow Airport (Central Bus Station T2 and T3),9.323333333333332
 Luton,Manchester,Luton Halfway Avenue,Manchester (Moss Lane East),11.49
 Bristol,Manchester,Bristol Bus Station (UK),Manchester (Moss Lane East),7.99
 Leeds,Dundee,Leeds Cultural Stop C,Dundee (Overgate Centre - West Marketgait),20.99
 Coventry,Birmingham,Coventry (Pool Meadow),Birmingham - Great Charles Street Queensway,4.49
-Nottingham,London,Nottingham Broad Marsh Bus Station,London Heathrow Airport (Central Bus Station, T2 and T3),11.489999999999998
+Nottingham,London,Nottingham Broad Marsh Bus Station,London Heathrow Airport (Central Bus Station T2 and T3),11.489999999999998
 Leicester,Nottingham,Leicester (Fosse Park),University of Nottingham - South Entrance UN07,3.99
 Glasgow,Manchester,Glasgow,Manchester (Shudehill Interchange),16.99
 Nottingham,Edinburgh,Nottingham Broad Marsh Bus Station,Edinburgh Bus Station,25.49
@@ -112,51 +112,51 @@ Liverpool,Coventry,Liverpool (One Bus Station),Coventry (Pool Meadow),7.99
 Northampton,Chester,Northampton Town Centre,Chester Bus Interchange (Stand N),10.49
 Nottingham,Aberdeen,Nottingham Broad Marsh Bus Station,Aberdeen Bus Station,37.99
 Edinburgh,Sunderland,Edinburgh Bus Station,Sunderland Interchange,7.49
-London,Exeter,London Heathrow Airport (Central Bus Station, T2 and T3),Exeter (Stover Court- Bampfylde Street),12.99
+London,Exeter,London Heathrow Airport (Central Bus Station T2 and T3),Exeter (Stover Court- Bampfylde Street),12.99
 Bradford,Derby,Bradford Interchange,Derby,6.489999999999999
 Middlesbrough,Leeds,Middlesbrough (Bus Station),Leeds City Bus Station,5.489999999999999
 Nottingham,Northampton,University of Nottingham UN04,Northampton Town Centre,17.99
 Glasgow,Northampton,Glasgow,Northampton Town Centre,19.99
 Cardiff,Leeds,Cardiff North Road (Friary Gardens),Leeds City Bus Station,14.49
 Liverpool,Northampton,Liverpool (One Bus Station),Northampton Town Centre,12.99
-London,Bournemouth,London Heathrow Airport (Central Bus Station, T2 and T3),Bournemouth,8.99
+London,Bournemouth,London Heathrow Airport (Central Bus Station T2 and T3),Bournemouth,8.99
 London,Nottingham,London Heathrow Airport (Terminal 5),Nottingham Broad Marsh Bus Station,10.989999999999998
 Leeds,Birmingham,Leeds City Bus Station,Birmingham - Great Charles Street Queensway,6.573333333333334
 Middlesbrough,Manchester,Middlesbrough (Bus Station),Manchester (Shudehill Interchange),6.656666666666666
-Southampton,London,Southampton Central Station (Stop SF),London Heathrow Airport (Central Bus Station, T2 and T3),17.99
+Southampton,London,Southampton Central Station (Stop SF),London Heathrow Airport (Central Bus Station T2 and T3),17.99
 Northampton,Coventry,Northampton Town Centre,Coventry (Pool Meadow),4.99
 Warrington,Birmingham,Warrington Interchange,Birmingham - Great Charles Street Queensway,5.49
-London,Stoke-on-Trent,London Heathrow Airport (Central Bus Station, T2 and T3),Stoke-on-Trent (Hanley Bus Station),12.56142857142857
+London,Stoke-on-Trent,London Heathrow Airport (Central Bus Station T2 and T3),Stoke-on-Trent (Hanley Bus Station),12.56142857142857
 Cardiff,Sheffield,Cardiff North Road (Friary Gardens),Sheffield (Meadowhall Interchange),12.99
-Northampton,London,Northampton Town Centre,London Heathrow Airport (Central Bus Station, T2 and T3),16.99
+Northampton,London,Northampton Town Centre,London Heathrow Airport (Central Bus Station T2 and T3),16.99
 Bradford,Nottingham,Bradford Interchange,Nottingham (Phoenix Park P+R),5.99
-Poole,London,Poole Seldown Coach Station,London Heathrow Airport (Central Bus Station, T2 and T3),9.323333333333332
-Sheffield,London,Sheffield Interchange,London Heathrow Airport (Central Bus Station, T2 and T3),13.99
-London,Southampton,London Heathrow Airport (Central Bus Station, T2 and T3),Southampton University,17.99
-London,Birmingham,London Heathrow Airport (Central Bus Station, T2 and T3),Birmingham - Great Charles Street Queensway,9.156666666666665
+Poole,London,Poole Seldown Coach Station,London Heathrow Airport (Central Bus Station T2 and T3),9.323333333333332
+Sheffield,London,Sheffield Interchange,London Heathrow Airport (Central Bus Station T2 and T3),13.99
+London,Southampton,London Heathrow Airport (Central Bus Station T2 and T3),Southampton University,17.99
+London,Birmingham,London Heathrow Airport (Central Bus Station T2 and T3),Birmingham - Great Charles Street Queensway,9.156666666666665
 Gloucester,Birmingham,Gloucester (Transport Hub),Birmingham - Great Charles Street Queensway,4.99
 Sheffield,Edinburgh,Sheffield (Meadowhall Interchange),Edinburgh Bus Station,16.99
 Birmingham,Gloucester,Birmingham - Great Charles Street Queensway,Gloucester (Transport Hub),4.99
 Carlisle,Leeds,Carlisle (Halston Hotel),Leeds Cultural Stop C,8.99
-London,Plymouth,London Heathrow Airport (Central Bus Station, T2 and T3),Plymouth Coach Station,15.49
+London,Plymouth,London Heathrow Airport (Central Bus Station T2 and T3),Plymouth Coach Station,15.49
 Sheffield,Aberdeen,Sheffield (Meadowhall Interchange),Aberdeen Bus Station,27.49
 Newport,Cardiff,Newport,Cardiff North Road (Friary Gardens),3.49
 Sheffield,Northampton,Sheffield (Meadowhall Interchange),Northampton (Grange Park - Saxon Avenue),8.99
 Coventry,Manchester,Coventry (Pool Meadow),Manchester (Shudehill Interchange),14.74
 Bristol,Swansea,Bristol Bus Station (UK),Swansea University,6.297692307692307
-London,Glasgow,London Heathrow Airport (Central Bus Station, T2 and T3),Glasgow,35.99
-Edinburgh,London,Edinburgh Bus Station,London Heathrow Airport (Central Bus Station, T2 and T3),31.99
+London,Glasgow,London Heathrow Airport (Central Bus Station T2 and T3),Glasgow,35.99
+Edinburgh,London,Edinburgh Bus Station,London Heathrow Airport (Central Bus Station T2 and T3),31.99
 Manchester,Darlington,Manchester (Shudehill Interchange),Darlington (Town Hall),6.99
 Leicester,Bradford,Leicester (Fosse Park),Bradford Interchange,7.656666666666666
 Bristol,Weston-super-Mare,Bristol Bus Station (UK),Weston-super-Mare - Worle Station,4.99
 Coventry,Northampton,Coventry (Pool Meadow),Northampton Town Centre,4.99
 Swindon,Cambridge,Regent Circus Swindon (Stop C),Cambridge (Trumpington Park and Ride),8.99
-Leicester,London,Leicester St Margarets bus station,London Heathrow Airport (Central Bus Station, T2 and T3),8.545555555555556
+Leicester,London,Leicester St Margarets bus station,London Heathrow Airport (Central Bus Station T2 and T3),8.545555555555556
 Edinburgh,Aberdeen,Edinburgh Bus Station,Aberdeen Bus Station,12.389999999999997
 Glasgow,Dundee,Glasgow,Dundee (Overgate Centre - West Marketgait),5.489999999999999
 Carlisle,Northampton,Carlisle (Halston Hotel),Northampton Town Centre,19.49
 Preston,Birmingham,Preston Bus Station,Birmingham - Great Charles Street Queensway,11.99
-London,Leeds,London Heathrow Airport (Central Bus Station, T2 and T3),Leeds City Bus Station,10.99
+London,Leeds,London Heathrow Airport (Central Bus Station T2 and T3),Leeds City Bus Station,10.99
 Birmingham,Bristol,Birmingham - Great Charles Street Queensway,Bristol Bus Station (UK),5.990000000000001
 Leicester,Northampton,Leicester St Margarets bus station,Northampton (Grange Park - Saxon Avenue),7.989999999999999
 Leeds,Sheffield,Leeds City Bus Station,Sheffield (Meadowhall Interchange),4.531666666666669
@@ -164,19 +164,19 @@ Leeds,Manchester,Leeds City Bus Station,Manchester (Shudehill Interchange),3.990
 Leeds,Leicester,Leeds City Bus Station,Leicester (Fosse Park),7.156666666666667
 Plymouth,Bristol,Plymouth Coach Station,Bristol Bus Station (UK),6.99
 Swindon,Cardiff,Regent Circus Swindon (Stop C),Cardiff North Road (Friary Gardens),6.49
-London,Bradford,London Heathrow Airport (Central Bus Station, T2 and T3),Bradford Interchange,16.49
+London,Bradford,London Heathrow Airport (Central Bus Station T2 and T3),Bradford Interchange,16.49
 Manchester,Bristol,Manchester (Shudehill Interchange),Bristol Bus Station (UK),7.49
 Luton,Cambridge,Luton DART Parkway (For Airport),Cambridge (Trumpington Park and Ride),9.49
 Bristol,Birmingham,Bristol Bus Station (UK),Birmingham - Great Charles Street Queensway,5.990000000000001
 Preston,Glasgow,Preston Bus Station,Glasgow,9.49
-London,Sheffield,London Heathrow Airport (Central Bus Station, T2 and T3),Sheffield Interchange,12.49
+London,Sheffield,London Heathrow Airport (Central Bus Station T2 and T3),Sheffield Interchange,12.49
 Bournemouth,Southampton,Bournemouth,Southampton Central Station (Stop SF),3.49
-London,Leicester,London Heathrow Airport (Central Bus Station, T2 and T3),Leicester St Margarets bus station,8.323333333333332
-London,Manchester,London Heathrow Airport (Central Bus Station, T2 and T3),Manchester (Moss Lane East),16.99
+London,Leicester,London Heathrow Airport (Central Bus Station T2 and T3),Leicester St Margarets bus station,8.323333333333332
+London,Manchester,London Heathrow Airport (Central Bus Station T2 and T3),Manchester (Moss Lane East),16.99
 Nottingham,Birmingham,Nottingham (Phoenix Park P+R),Birmingham - Great Charles Street Queensway,4.49
 Bristol,Plymouth,Bristol Bus Station (UK),Plymouth Coach Station,6.890000000000001
 Glasgow,Birmingham,Glasgow,Birmingham - Great Charles Street Queensway,20.74
-Bradford,London,Bradford Interchange,London Heathrow Airport (Central Bus Station, T2 and T3),21.99
+Bradford,London,Bradford Interchange,London Heathrow Airport (Central Bus Station T2 and T3),21.99
 Liverpool,Birmingham,Liverpool (One Bus Station),Birmingham - Great Charles Street Queensway,7.090000000000001
 Newport,Swindon,Newport,Regent Circus Swindon (Stop C),7.99
 Manchester,Sunderland,Manchester (Shudehill Interchange),Sunderland Interchange,7.489999999999999
@@ -195,12 +195,12 @@ Dundee,Sheffield,Dundee (Overgate Centre - West Marketgait),Sheffield (Meadowhal
 Leeds,Middlesbrough,Leeds City Bus Station,Middlesbrough (Bus Station),5.489999999999999
 Poole,Southampton,Poole Seldown Coach Station,Southampton Central Station (Stop SF),4.99
 Sheffield,Birmingham,Sheffield (Meadowhall Interchange),Birmingham - Great Charles Street Queensway,5.990000000000001
-London,Luton,London Heathrow Airport (Central Bus Station, T2 and T3),Luton DART Parkway (For Airport),4.99
+London,Luton,London Heathrow Airport (Central Bus Station T2 and T3),Luton DART Parkway (For Airport),4.99
 Darlington,Leeds,Darlington (Town Hall),Leeds City Bus Station,5.49
 Edinburgh,Nottingham,Edinburgh Bus Station,Nottingham Broad Marsh Bus Station,23.49
 Bristol,Sheffield,Bristol Bus Station (UK),Sheffield (Meadowhall Interchange),8.39
 Nottingham,Bradford,Nottingham (Phoenix Park P+R),Bradford Interchange,5.99
-London,Middlesbrough,London Heathrow Airport (Central Bus Station, T2 and T3),Middlesbrough (Bus Station),27.99
+London,Middlesbrough,London Heathrow Airport (Central Bus Station T2 and T3),Middlesbrough (Bus Station),27.99
 Birmingham,Coventry,Birmingham - Great Charles Street Queensway,Coventry (Pool Meadow),4.49
 Newport,Gloucester,Newport,Gloucester (Transport Hub),4.49
 Nottingham,Sheffield,Nottingham (Phoenix Park P+R),Sheffield (Meadowhall Interchange),3.99
@@ -227,12 +227,12 @@ Leeds,Liverpool,Leeds City Bus Station,Liverpool (Wavertree Shopping Centre),5.2
 Swindon,Gloucester,Regent Circus Swindon (Stop C),Gloucester (Transport Hub),3.49
 Newport,Bristol,Newport,Bristol Bus Station (UK),4.2280952380952375
 Sheffield,Bradford,Sheffield (Meadowhall Interchange),Bradford Interchange,4.323333333333333
-London,Poole,London Heathrow Airport (Central Bus Station, T2 and T3),Poole Seldown Coach Station,8.99
+London,Poole,London Heathrow Airport (Central Bus Station T2 and T3),Poole Seldown Coach Station,8.99
 Northampton,Sheffield,Northampton (Grange Park - Saxon Avenue),Sheffield (Meadowhall Interchange),8.99
-London,Cambridge,London Heathrow Airport (Central Bus Station, T2 and T3),Cambridge (Trumpington Park and Ride),6.49
+London,Cambridge,London Heathrow Airport (Central Bus Station T2 and T3),Cambridge (Trumpington Park and Ride),6.49
 Northampton,Leicester,Northampton (Grange Park - Saxon Avenue),Leicester St Margarets bus station,7.989999999999999
 Northampton,Manchester,Northampton (Grange Park - Saxon Avenue),Manchester (Shudehill Interchange),20.99
-Exeter,London,Exeter (Stover Court- Bampfylde Street),London Heathrow Airport (Central Bus Station, T2 and T3),14.49
+Exeter,London,Exeter (Stover Court- Bampfylde Street),London Heathrow Airport (Central Bus Station T2 and T3),14.49
 Sheffield,Leicester,Sheffield (Meadowhall Interchange),Leicester St Margarets bus station,5.99
 Sheffield,Manchester,Sheffield (Meadowhall Interchange),Manchester (Shudehill Interchange),3.99
 Edinburgh,Leeds,Edinburgh Bus Station,Leeds Cultural Stop C,13.99
@@ -242,18 +242,18 @@ Bradford,Birmingham,Bradford Interchange,Birmingham - Great Charles Street Queen
 Swansea,Cardiff,Swansea,Cardiff North Road (Friary Gardens),3.9900000000000015
 Leicester,Leeds,Leicester (Fosse Park),Leeds City Bus Station,6.906666666666667
 Leeds,Sunderland,Leeds City Bus Station,Sunderland Interchange,6.99
-London,Cardiff,London Heathrow Airport (Central Bus Station, T2 and T3),Cardiff North Road (Friary Gardens),13.882857142857144
+London,Cardiff,London Heathrow Airport (Central Bus Station T2 and T3),Cardiff North Road (Friary Gardens),13.882857142857144
 Gloucester,Cardiff,Gloucester (Transport Hub),Cardiff North Road (Friary Gardens),4.99
 Bristol,Gloucester,Bristol Bus Station (UK),Gloucester (Transport Hub),3.49
 Cardiff,Swindon,Cardiff North Road (Friary Gardens),Regent Circus Swindon (Stop C),6.49
 Glasgow,Middlesbrough,Glasgow,Middlesbrough (Bus Station),9.99
 Edinburgh,Sheffield,Edinburgh Bus Station,Sheffield (Meadowhall Interchange),16.99
 Stoke-on-Trent,Coventry,Stoke-on-Trent (Hanley Bus Station),Coventry (Pool Meadow),5.240000000000001
-London,Oxford,London Heathrow Airport (Central Bus Station, T2 and T3),Oxford Bus Station,25.6098
+London,Oxford,London Heathrow Airport (Central Bus Station T2 and T3),Oxford Bus Station,25.6098
 Carlisle,Sheffield,Carlisle (Halston Hotel),Sheffield (Meadowhall Interchange),10.99
 Stoke-on-Trent,London,Stoke-on-Trent (Hanley Bus Station),London Heathrow Airport (Terminal 5),13.656666666666666
 Nottingham,Dundee,Nottingham Broad Marsh Bus Station,Dundee (Overgate Centre - West Marketgait),22.99
-Derby,London,Derby,London Heathrow Airport (Central Bus Station, T2 and T3),26.99
+Derby,London,Derby,London Heathrow Airport (Central Bus Station T2 and T3),26.99
 Leicester,Sheffield,Leicester St Margarets bus station,Sheffield (Meadowhall Interchange),5.99
 Leicester,Manchester,Leicester St Margarets bus station,Manchester (Shudehill Interchange),6.49
 Aberdeen,Nottingham,Aberdeen Bus Station,Nottingham Broad Marsh Bus Station,34.99
@@ -264,18 +264,18 @@ Cardiff,Gloucester,Cardiff North Road (Friary Gardens),Gloucester (Transport Hub
 Cardiff,Newport,Cardiff North Road (Friary Gardens),Newport,3.49
 Cambridge,Swindon,Cambridge Parkside - Stop 18,Regent Circus Swindon (Stop C),8.99
 Manchester,Nottingham,Manchester (Shudehill Interchange),Nottingham Broad Marsh Bus Station,5.49
-Cambridge,London,Cambridge Parkside - Stop 18,London Heathrow Airport (Central Bus Station, T2 and T3),6.24
-Oxford,London,Oxford Bus Station,London Heathrow Airport (Central Bus Station, T2 and T3),25.617450980392153
+Cambridge,London,Cambridge Parkside - Stop 18,London Heathrow Airport (Central Bus Station T2 and T3),6.24
+Oxford,London,Oxford Bus Station,London Heathrow Airport (Central Bus Station T2 and T3),25.617450980392153
 Bradford,Sheffield,Bradford Interchange,Sheffield (Meadowhall Interchange),4.49
 Bradford,Leicester,Bradford Interchange,Leicester (Fosse Park),8.156666666666666
 Manchester,Stoke-on-Trent,Manchester (Moss Lane East),Stoke-on-Trent (Hanley Bus Station),5.99
 Sheffield,Dundee,Sheffield (Meadowhall Interchange),Dundee (Overgate Centre - West Marketgait),24.49
 Bristol,Cardiff,Bristol Bus Station (UK),Cardiff North Road (Friary Gardens),5.33782608695652
 Leeds,Edinburgh,Leeds Cultural Stop C,Edinburgh Bus Station,16.99
-Newport,London,Newport,London Heathrow Airport (Central Bus Station, T2 and T3),13.156666666666668
+Newport,London,Newport,London Heathrow Airport (Central Bus Station T2 and T3),13.156666666666668
 Leeds,Aberdeen,Leeds Cultural Stop C,Aberdeen Bus Station,17.99
 Manchester,Birmingham,Manchester (Shudehill Interchange),Birmingham - Great Charles Street Queensway,7.323333333333334
-London,Swindon,London Heathrow Airport (Central Bus Station, T2 and T3),Regent Circus Swindon (Stop C),8.99
+London,Swindon,London Heathrow Airport (Central Bus Station T2 and T3),Regent Circus Swindon (Stop C),8.99
 Sunderland,Glasgow,Sunderland Interchange,Glasgow,8.74
 Gloucester,Swindon,Gloucester (Transport Hub),Regent Circus Swindon (Stop C),3.49
 Edinburgh,Middlesbrough,Edinburgh Bus Station,Middlesbrough (Bus Station),9.74
@@ -283,7 +283,7 @@ Aberdeen,Glasgow,Aberdeen Bus Station,Glasgow,7.052499999999998
 Birmingham,Glasgow,Birmingham - Great Charles Street Queensway,Glasgow,20.24
 Glasgow,Sunderland,Glasgow,Sunderland Interchange,8.74
 Chester,Coventry,Chester Bus Interchange (Stand N),Coventry (Pool Meadow),7.99
-Cheltenham,London,Cheltenham Royal Well Bus Station,London Heathrow Airport (Central Bus Station, T2 and T3),7.656666666666666
+Cheltenham,London,Cheltenham Royal Well Bus Station,London Heathrow Airport (Central Bus Station T2 and T3),7.656666666666666
 Edinburgh,Dundee,Edinburgh Bus Station,Dundee (Overgate Centre - West Marketgait),6.3900000000000015
 Manchester,Glasgow,Manchester (Shudehill Interchange),Glasgow,16.99
 Glasgow,Preston,Glasgow,Preston Bus Station,9.99

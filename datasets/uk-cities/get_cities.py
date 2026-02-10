@@ -29,7 +29,7 @@ for row in largest_cities.itertuples():
 
 
 # send requests to the DB to add each city to the DB
-"""
+
 ENDPOINT = "http://127.0.0.1:8000/city/"
 for city in cities:
     response = requests.post(ENDPOINT, json=city)
@@ -37,4 +37,4 @@ for city in cities:
         print("Added succesfully")
     else:
         print("Error")
-"""
+
