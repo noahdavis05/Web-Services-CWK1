@@ -28,11 +28,19 @@ class GraphManager:
             try:
                 origin_city = route.origin_station.city.id
                 dest_city = route.destination_station.city.id
+
+                # railcard
+                if route.transport_mode.name == "train":
+                    price = float(route.price) 
+                else:
+                    price = route.price
                 
                 edge_data = {
                     "route_id": route.id,
                     "destination_city": dest_city,
-                    "price": float(route.price)
+                    "origin_station_id": route.origin_station.id,
+                    "destination_station_id": route.destination_station.id,
+                    "price": float(price)
                 }
 
                 if origin_city not in new_graph:
