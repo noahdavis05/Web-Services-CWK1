@@ -51,7 +51,7 @@ def resolve_station(name, city_id):
 # --- Main Execution ---
 
 # Load the CSV
-df = pd.read_csv('extracted_fares.csv')
+df = pd.read_csv('extracted_fares2.csv')
 # Standardize column names (ensuring they match your CSV header)
 # Format: origin_city,destination_city,origin_station,destination_station,price
 data = df.to_dict(orient='records')

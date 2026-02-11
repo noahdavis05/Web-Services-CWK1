@@ -1,7 +1,7 @@
 import os
 import requests
 import csv
-from extract_NLC import get_all_codes
+from extract_NLC import map_NLC_codes, filter_cities_and_codes, get_cluster_ids
 
 # --- CONFIGURATION ---
 BASE_URL = "http://127.0.0.1:8000"
@@ -16,20 +16,51 @@ TICKET_TYPES = {
 }
 
 # --- STEP 1: LOAD CITIES & CODES ---
-print("Step 1: Loading city NLC codes...")
-with open(CITIES_FILE, "r") as f:
-    city_names = [line.strip() for line in f.readlines()]
+print("Step 1: Building deep NLC lookup table...")
 
-# all_city_data stores { 'city_name': { 'NLC_CODE': 'Station Name' } }
+# Use your existing Pandas logic
+stations_df = map_NLC_codes(filter_cities_and_codes())
+
 all_city_data = {}
 all_allowed_nlcs = set()
 
-for city in city_names:
-    codes = get_all_codes(city)
-    # Store as a dict for O(1) station name lookup later
-    all_city_data[city.lower()] = {c[0]: c[1] for c in codes}
-    for code, name in codes:
-        all_allowed_nlcs.add(code)
+for _, row in stations_df.iterrows():
+    city = str(row['LocalityName']).strip().lower()
+    crs_label = row['CrsCode']
+    
+    # row['NLC'] is a list (e.g. ['3271']) based on your previous output
+    base_nlcs = row['NLC'] if isinstance(row['NLC'], list) else [row['NLC']]
+    
+    if city not in all_city_data:
+        all_city_data[city] = {}
+
+    for nlc in base_nlcs:
+        # 1. Add the base NLC
+        all_city_data[city][nlc] = crs_label
+        all_allowed_nlcs.add(nlc)
+        
+        # 2. Use your get_cluster_ids function
+        # To be safe, we check for clusters of clusters (Recursive)
+        to_process = [nlc]
+        processed = set()
+        
+        while to_process:
+            current = to_process.pop()
+            if current in processed: continue
+            processed.add(current)
+            
+            # Find clusters this NLC/ID belongs to
+            clusters = get_cluster_ids("fares_data/RJFAF658.FSC", current)
+            for cluster_id in clusters:
+                all_city_data[city][cluster_id] = crs_label
+                all_allowed_nlcs.add(cluster_id)
+                # Add the cluster_id to to_process to see if it has a parent
+                to_process.append(cluster_id)
+
+
+all_city_data["london"] = all_city_data["islington"]
+available_cities = sorted(list(all_city_data.keys()))
+print(f"Verified {len(available_cities)} cities. Monitoring {len(all_allowed_nlcs)} codes.")
 
 # --- STEP 2: SINGLE-PASS FILE INDEXING ---
 # Instead of searching the file 20,000 times, we read it ONCE.
@@ -68,14 +99,14 @@ f_out = open(OUTPUT_CSV, "a", encoding='utf-8')
 if not file_exists:
     f_out.write("origin_city,destination_city,origin_station,destination_station,price\n")
 
-for i, city_a in enumerate(city_names):
+for i, city_a in enumerate(available_cities):
     city_a = city_a.lower()
     a_lookup = all_city_data[city_a] # {NLC: Name}
     
-    print(f"Processing {city_a} ({i+1}/{len(city_names)})...")
+    print(f"Processing {city_a} ({i+1}/{len(available_cities)})...")
     
-    for j in range(i + 1, len(city_names)):
-        city_b = city_names[j].lower()
+    for j in range(i + 1, len(available_cities)):
+        city_b = available_cities[j].lower()
         b_lookup = all_city_data[city_b] # {NLC: Name}
         
         pair_fares = []
