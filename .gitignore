@@ -5,3 +5,5 @@ __pycache__/
 data/
 .env
 FLIX/
+Stops.csv
+RailReferences.csv
