@@ -6,6 +6,7 @@ from ..database import get_db
 from .. import models, schemas
 from ..utils.graph_manager import GraphManager
 from ..utils.journey_finder import find_cheapest_path
+from ..utils.verify_auth_token import get_current_user
 
 router = APIRouter(
     prefix="/journeys",
@@ -13,7 +14,7 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=schemas.JourneyRead, status_code=200)
-def get_journey(origin_id: int, destination_id: int, db: Session = Depends(get_db)):
+def get_journey(origin_id: int, destination_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     
     graph_manager = GraphManager() # gets us our instance of our singleton class
     

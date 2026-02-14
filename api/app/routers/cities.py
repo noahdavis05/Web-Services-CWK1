@@ -4,12 +4,14 @@ from typing import List
 
 from ..database import get_db
 from .. import models, schemas
+from ..utils.verify_auth_token import validate_user_role
 
 
 # create a router for routes to do with the City model
 router = APIRouter(
     prefix="/city",
-    tags=["Cities"]
+    tags=["Cities"],
+    dependencies=[Depends(validate_user_role(["admin"]))]
 )
 
 @router.post("/", response_model=schemas.CityRead, status_code=201)

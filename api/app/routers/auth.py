@@ -14,7 +14,12 @@ def signup(data: schemas.AuthSchema):
     try:
         response = supabase.auth.sign_up({
             "email": data.email,
-            "password": data.password
+            "password": data.password,
+            "options": {
+                "data": {
+                    "role": "user"  # default to user
+                }
+            }
         })
         return {"message": "User created", "id": response.user.id}
     except Exception as e:

@@ -4,10 +4,12 @@ from typing import List
 
 from ..database import get_db
 from .. import models, schemas
+from ..utils.verify_auth_token import validate_user_role
 
 router = APIRouter(
     prefix="/transport_mode",
-    tags=["Transport Modes"]
+    tags=["Transport Modes"],
+    dependencies=[Depends(validate_user_role(["admin"]))]
 )
 
 @router.post("/", response_model=schemas.TransportModeRead, status_code=201)

@@ -4,12 +4,14 @@ from typing import List
 
 from ..database import get_db
 from .. import models, schemas
+from ..utils.verify_auth_token import validate_user_role
 
 # create a router - similar to a mini-app for endpoints to do with 
 # routes between cities
 router = APIRouter(
     prefix="/routes",
-    tags=["Travel Routes"] # for the docs, keeps these endpoints together
+    tags=["Travel Routes"], # for the docs, keeps these endpoints together
+    dependencies=[Depends(validate_user_role(["admin"]))]
 )
 
 @router.post("/", response_model=schemas.RouteRead, status_code=201)
