@@ -17,7 +17,7 @@ This API finds the estimated cheapest route between any of the top 200 largest U
 1. Set the correct `DATABASE_URL` in the .env in the `api` directory.
 2. Run the API - See above.
 3. Go to the URL `127.0.0.1:8000/docs#/`. 
-4. Find the **Travel Routes** section and test the **POST** endpoint. Create firstly a travel method 'coach' and secondly a travel method 'train'.
+4. Find the **Transport Modes** section and test the **POST** endpoint. Create firstly a travel method 'coach' and secondly a travel method 'train'.
 5. Open a new terminal and navigate to `/datasets/uk-cities`.
 6. Activate venv `source venv/bin/activate`.
 7. Run the script get_cities.py `python3 get_cities.py`. This will add all cities to the database.

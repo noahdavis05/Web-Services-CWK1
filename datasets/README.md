@@ -38,3 +38,8 @@ To find a stations NLC Code we need to use the `.LOC` file. The data is in this 
 | CRS Code | 82-84 | WML | The 3-letter code you see on departure boards. |
 | NLC (Again) | 93-96 | 2774 | Repeated for data integrity checks. |
 | Zone/Region | 100-101 | 06 | Regional code (06 is usually North West/Manchester area). |
+
+
+## Sources
+1. https://gist.github.com/crablab/93a50eeb338646614287eddc3c2776b1
+2. https://www.data.gov.uk/dataset/ff93ffc1-6656-47d8-9155-85ea0b8f2251/naptan

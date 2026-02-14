@@ -24,37 +24,40 @@ stations_df = map_NLC_codes(filter_cities_and_codes())
 all_city_data = {}
 all_allowed_nlcs = set()
 
+# --- STEP 1: LOAD CITIES & CODES ---
+stations_df = map_NLC_codes(filter_cities_and_codes())
+
+all_city_data = {}
+all_allowed_nlcs = set()
+
 for _, row in stations_df.iterrows():
     city = str(row['LocalityName']).strip().lower()
-    crs_label = row['CrsCode']
+    # CHANGE THIS LINE: Use StationName instead of CrsCode
+    station_label = row['StationName'] 
     
-    # row['NLC'] is a list (e.g. ['3271']) based on your previous output
     base_nlcs = row['NLC'] if isinstance(row['NLC'], list) else [row['NLC']]
     
     if city not in all_city_data:
         all_city_data[city] = {}
 
     for nlc in base_nlcs:
-        # 1. Add the base NLC
-        all_city_data[city][nlc] = crs_label
+        # 1. Map the NLC to the descriptive Station Name
+        all_city_data[city][nlc] = station_label
         all_allowed_nlcs.add(nlc)
         
-        # 2. Use your get_cluster_ids function
-        # To be safe, we check for clusters of clusters (Recursive)
+        # 2. Handle Clusters (FSC)
         to_process = [nlc]
         processed = set()
-        
         while to_process:
             current = to_process.pop()
             if current in processed: continue
             processed.add(current)
             
-            # Find clusters this NLC/ID belongs to
             clusters = get_cluster_ids("fares_data/RJFAF658.FSC", current)
             for cluster_id in clusters:
-                all_city_data[city][cluster_id] = crs_label
+                # Also map the Cluster ID to the specific Station Name
+                all_city_data[city][cluster_id] = station_label
                 all_allowed_nlcs.add(cluster_id)
-                # Add the cluster_id to to_process to see if it has a parent
                 to_process.append(cluster_id)
 
 
@@ -118,8 +121,10 @@ for i, city_a in enumerate(available_cities):
             is_bwd = (org in b_lookup and dest in a_lookup)
 
             if (is_fwd or is_bwd) and flow_id in prices:
+                # Inside the flow_id loop in Step 3:
                 for price, t_name in prices[flow_id]:
-                    # Map NLC back to station names
+                    # This .get(org) will now return the "StationName" 
+                    # because that's what we stored in a_lookup/b_lookup in Step 1
                     o_name = a_lookup.get(org) or b_lookup.get(org)
                     d_name = b_lookup.get(dest) or a_lookup.get(dest)
                     

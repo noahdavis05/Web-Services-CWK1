@@ -16,9 +16,9 @@ router = APIRouter(
 def get_journey(origin_id: int, destination_id: int, db: Session = Depends(get_db)):
     
     graph_manager = GraphManager() # gets us our instance of our singleton class
+    
 
     cheapest_path = find_cheapest_path(graph_manager, origin_id, destination_id)
-
     if not cheapest_path:
         raise HTTPException(status_code=404, detail="No journey found")
     

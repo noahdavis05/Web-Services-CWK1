@@ -142,7 +142,7 @@ def get_cities_and_CRS():
     merged_data = merged_data.dropna(subset=['CrsCode'])
 
     # Keep only the necessary columns 
-    merged_data = merged_data[['LocalityName', 'CrsCode', 'ATCOCode']]
+    merged_data = merged_data[['LocalityName', 'CrsCode', 'ATCOCode', 'StationName']]
 
 
     print(f"Successfully mapped {len(merged_data)} rail stations to CRS codes.")

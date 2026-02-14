@@ -35,12 +35,23 @@ def get_all_cities(db: Session = Depends(get_db)):
     """
     return db.query(models.City).all()
 
-@router.get("/{city_id}", response_model=schemas.CityRead)
+@router.get("/id/{city_id}", response_model=schemas.CityRead)
 def get_city_by_id(city_id: int, db: Session = Depends(get_db)):
     """
     # Get a city by ID
     """
     city = db.query(models.City).filter(models.City.id == city_id).first()
+    if not city:
+        raise HTTPException(status_code=404, detail="City not found")
+    return city
+
+@router.get("/name/{city_name}", response_model=schemas.CityRead)
+def get_city_by_name(city_name: str, db: Session = Depends(get_db)):
+    """
+    # Get a city by its name
+    """
+    city_name = city_name.lower()
+    city = db.query(models.City).filter(models.City.name == city_name).first()
     if not city:
         raise HTTPException(status_code=404, detail="City not found")
     return city
