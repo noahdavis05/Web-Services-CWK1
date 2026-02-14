@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy.orm import Session, joinedload
 
-from .routers import routes, cities, stations, transport_modes, journeys
+from .routers import routes, cities, stations, transport_modes, journeys, auth
 from .database import SessionLocal
 from .utils.graph_manager import GraphManager
 from . import models
@@ -43,3 +43,4 @@ app.include_router(cities.router)
 app.include_router(stations.router)
 app.include_router(transport_modes.router)
 app.include_router(journeys.router)
+app.include_router(auth.router)

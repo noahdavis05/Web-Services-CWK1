@@ -1,6 +1,7 @@
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, EmailStr
 from decimal import Decimal
 from typing import Optional, List
+
 
 # CITY SCHEMAS
 class CityBase(BaseModel):
@@ -92,3 +93,9 @@ class JourneyRead(BaseModel):
     path: List[RouteRead]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+# AUTHENTICATION SCHEMA
+class AuthSchema(BaseModel):
+    email: EmailStr
+    password: str
