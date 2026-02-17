@@ -4,6 +4,8 @@ from app.main import app
 from unittest.mock import MagicMock
 from app.utils.supabase_client import supabase
 from app.utils.verify_auth_token import get_current_user
+from app.database import engine, get_db
+from sqlalchemy.orm import sessionmaker
 
 @pytest.fixture
 def client(mock_supabase_auth, mock_graph_manager):
@@ -68,3 +70,33 @@ def as_admin():
     app.dependency_overrides[get_current_user] = lambda: MockAdmin()
     yield
     app.dependency_overrides = {}
+
+
+# overrides to ensure that any commit is rolled back
+# this means our test db always stays the same
+TestingSessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
+)
+
+@pytest.fixture
+def db_session():
+    connection = engine.connect()
+
+    transaction = connection.begin()
+
+    session = TestingSessionLocal(bind=connection)
+
+    yield session
+
+    session.close()
+    transaction.rollback()
+    connection.close()
+
+
+@pytest.fixture(autouse=True)
+def override_get_db(db_session):
+    app.dependency_overrides[get_db] = lambda: db_session
+    yield
+    app.dependency_overrides.pop(get_db, None)

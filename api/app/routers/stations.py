@@ -46,7 +46,7 @@ def get_station_by_id(station_id: int, db: Session = Depends(get_db)):
     """
     Get station by ID
     """
-    station = db.query(models.Station).filter(models.City.id == station_id).first()
+    station = db.query(models.Station).filter(models.Station.id == station_id).first()
 
     if not station:
         raise HTTPException(status_code=404, detail="Station not found")
