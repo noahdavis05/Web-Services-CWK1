@@ -95,7 +95,16 @@ class JourneyRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# AUTHENTICATION SCHEMA
+# AUTHENTICATION SCHEMAs
 class AuthSchema(BaseModel):
     email: EmailStr
     password: str
+
+class SignupResponse(BaseModel):
+    message: str
+    id: str
+
+class LoginResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"

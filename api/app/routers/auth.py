@@ -9,7 +9,7 @@ router = APIRouter(
 )
 
 
-@router.post("/signup")
+@router.post("/signup", response_model=schemas.SignupResponse)
 def signup(data: schemas.AuthSchema):
     try:
         response = supabase.auth.sign_up({
@@ -26,7 +26,7 @@ def signup(data: schemas.AuthSchema):
         raise HTTPException(status_code=400, detail=str(e))
     
 
-@router.post("/login")
+@router.post("/login", response_model=schemas.LoginResponse)
 def login(data: schemas.AuthSchema):
     try:
         response = supabase.auth.sign_in_with_password({

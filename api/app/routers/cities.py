@@ -57,3 +57,28 @@ def get_city_by_name(city_name: str, db: Session = Depends(get_db)):
     if not city:
         raise HTTPException(status_code=404, detail="City not found")
     return city
+
+
+@router.put("/{city_id}", response_model=schemas.CityRead, status_code=200)
+def update_city(city_id: int, city_update: schemas.CityCreate, db: Session = Depends(get_db)):
+    """
+    Docstring for update_city
+    
+    :param city_id: Description
+    :type city_id: int
+    :param city_update: Description
+    :type city_update: schemas.CityCreate
+    :param db: Description
+    :type db: Session
+    """
+    city = db.query(models.City).filter(models.City.id == city_id).first()
+
+    if not city:
+        raise HTTPException("City not found")
+    
+    for key, value in city_update.model_dump().items():
+        setattr(city, key, value)
+
+    db.commit()
+    db.refresh(city)
+    return city
