@@ -10,6 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: "sqlite:///./testing/test.db"
+      SUPABASE_URL: "https://mbijonvergrzkhaocbek.supabase.co"
+      SUPABASE_PUBLIC_KEY: "test-public"
+      SUPABASE_SECRET_KEY: "test-secret"
+
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v4
