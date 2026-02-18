@@ -8,3 +8,4 @@ FLIX/
 Stops.csv
 RailReferences.csv
 .pytest_cache
+.env.test
