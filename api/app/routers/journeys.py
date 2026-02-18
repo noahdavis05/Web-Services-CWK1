@@ -15,6 +15,14 @@ router = APIRouter(
 
 @router.get("/", response_model=schemas.JourneyRead, status_code=200)
 def get_journey(origin_id: int, destination_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+    """
+    # Fetch a Journey
+    
+    A journey is a route between any two cities within the cities table.
+    This route returns the cheapest possible route by default.
+    It returns all legs of the journey.
+    **Note** - The sum of the prices of all legs doesn't equal the total price. This is because we only add a £2 changeover fee at each stop where the stations aren't the same.
+    """
     
     graph_manager = GraphManager() # gets us our instance of our singleton class
     
