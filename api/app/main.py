@@ -7,11 +7,16 @@ from .database import SessionLocal
 from .utils.graph_manager import GraphManager
 from . import models
 
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
+
 # on startup we load our graph of all routes into singleton class
 # this class will be used to avoid fetching all 30,000 routes from 
 # db every time we want to make a dijkstra's search between 2 cities
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # initialise cache and the graph manager
+    FastAPICache.init(InMemoryBackend())
     gm = GraphManager()
     
     db: Session = SessionLocal()

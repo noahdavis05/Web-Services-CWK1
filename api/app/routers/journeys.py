@@ -8,12 +8,15 @@ from ..utils.graph_manager import GraphManager
 from ..utils.journey_finder import find_cheapest_path
 from ..utils.verify_auth_token import get_current_user
 
+from fastapi_cache.decorator import cache
+
 router = APIRouter(
     prefix="/journeys",
     tags=["Journeys"]
 )
 
 @router.get("/", response_model=schemas.JourneyRead, status_code=200)
+@cache(expire=3600)
 def get_journey(origin_id: int, destination_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
     # Fetch a Journey
@@ -41,4 +44,3 @@ def get_journey(origin_id: int, destination_id: int, db: Session = Depends(get_d
         "total_price": cheapest_path['total_price'],
         "path": all_routes
     }
-    
