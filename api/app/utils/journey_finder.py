@@ -1,6 +1,10 @@
 import heapq
+from fastapi_cache.decorator import cache
 
-def find_cheapest_path(graph_manager, start_id, finish_id):
+
+@cache(expire=3600)
+async def find_cheapest_path(graph_manager, start_id, finish_id):
+    print("In function")
     graph = graph_manager.graph
     dest_station_id = 0
     
