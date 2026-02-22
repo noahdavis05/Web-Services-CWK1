@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/id", response_model=schemas.JourneyRead, status_code=200)
-async def get_journey(origin_id: int, destination_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+async def get_journey(origin_id: int, destination_id: int, railcard_discount: int = 0,db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
     # Fetch a Journey
     
@@ -28,7 +28,7 @@ async def get_journey(origin_id: int, destination_id: int, db: Session = Depends
     graph_manager = GraphManager() # gets us our instance of our singleton class
     
 
-    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id)
+    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id, railcard_discount)
     if not cheapest_path:
         raise HTTPException(status_code=404, detail="No journey found")
     
@@ -39,7 +39,10 @@ async def get_journey(origin_id: int, destination_id: int, db: Session = Depends
         all_routes.append(route)
 
     return {
-        "total_price": cheapest_path['total_price'],
+        "total_price": cheapest_path['ticket_costs'] - cheapest_path['ticket_discounts'] + cheapest_path['extra_costs'],
+        "ticket_price": cheapest_path['ticket_costs'],
+        "discounts": cheapest_path['ticket_discounts'],
+        "transfer_price": cheapest_path["extra_costs"],
         "path": all_routes
     }
 
@@ -71,10 +74,12 @@ async def get_journey(origin_name: str, destination_name: str, railcard_discount
     graph_manager = GraphManager() # gets us our instance of our singleton class
     
 
-    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id)
+    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id, railcard_discount)
     if not cheapest_path:
         raise HTTPException(status_code=404, detail="No journey found")
     
+    print(cheapest_path)
+
     # now need to get all the paths from the db in order
     all_routes = []
     for route_id in cheapest_path["route_ids"]:
@@ -82,6 +87,9 @@ async def get_journey(origin_name: str, destination_name: str, railcard_discount
         all_routes.append(route)
 
     return {
-        "total_price": cheapest_path['total_price'],
+        "total_price": cheapest_path['ticket_costs'] - cheapest_path['ticket_discounts'] + cheapest_path['extra_costs'],
+        "ticket_price": cheapest_path['ticket_costs'],
+        "discounts": cheapest_path['ticket_discounts'],
+        "transfer_price": cheapest_path["extra_costs"],
         "path": all_routes
     }
