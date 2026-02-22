@@ -85,6 +85,9 @@ class RouteRead(RouteBase):
 # JOURNEY SCHEMAS - This is the result of our Dijkstra. We return the cheapest route
 class JourneyRead(BaseModel):
     total_price: Decimal
+    ticket_price: Decimal
+    discounts: Decimal
+    transfer_price: Decimal
     path: List[RouteRead]
 
     model_config = ConfigDict(from_attributes=True)

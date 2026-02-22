@@ -40,7 +40,8 @@ class GraphManager:
                     "destination_city": dest_city,
                     "origin_station_id": route.origin_station.id,
                     "destination_station_id": route.destination_station.id,
-                    "price": float(price)
+                    "price": float(price),
+                    "transport_mode_id": route.transport_mode.id
                 }
 
                 if origin_city not in new_graph:
