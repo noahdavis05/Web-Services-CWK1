@@ -12,7 +12,7 @@ jobs:
 
     env:
       DATABASE_URL: "sqlite:///./testing/test.db"
-      SUPABASE_URL: "https://mbijonvergrzkhaocbek.supabase.co"
+      SUPABASE_URL: "https://github.com/noahdavis05/Web-Services-CWK1"
       SUPABASE_PUBLIC_KEY: "test-public"
       SUPABASE_SECRET_KEY: "test-secret"
 
