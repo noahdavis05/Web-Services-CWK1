@@ -39,9 +39,10 @@ async def get_journey(origin_id: int, destination_id: int, railcard_discount: in
         all_routes.append(route)
 
     return {
-        "total_price": cheapest_path['ticket_costs'] - cheapest_path['ticket_discounts'] + cheapest_path['extra_costs'],
+        "total_price": cheapest_path['ticket_costs'] - cheapest_path['ticket_discounts'] - cheapest_path["advanced_discounts"] + cheapest_path['extra_costs'],
         "ticket_price": cheapest_path['ticket_costs'],
-        "discounts": cheapest_path['ticket_discounts'],
+        "railcard_discounts": cheapest_path['ticket_discounts'],
+        "advanced_discounts": cheapest_path['advanced_discounts'],
         "transfer_price": cheapest_path["extra_costs"],
         "path": all_routes
     }
@@ -87,9 +88,10 @@ async def get_journey(origin_name: str, destination_name: str, railcard_discount
         all_routes.append(route)
 
     return {
-        "total_price": cheapest_path['ticket_costs'] - cheapest_path['ticket_discounts'] + cheapest_path['extra_costs'],
+        "total_price": cheapest_path['ticket_costs'] - cheapest_path['ticket_discounts'] - cheapest_path["advanced_discounts"] + cheapest_path['extra_costs'],
         "ticket_price": cheapest_path['ticket_costs'],
-        "discounts": cheapest_path['ticket_discounts'],
+        "railcard_discounts": cheapest_path['ticket_discounts'],
+        "advanced_discounts": cheapest_path['advanced_discounts'],
         "transfer_price": cheapest_path["extra_costs"],
         "path": all_routes
     }

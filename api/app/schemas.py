@@ -86,7 +86,8 @@ class RouteRead(RouteBase):
 class JourneyRead(BaseModel):
     total_price: Decimal
     ticket_price: Decimal
-    discounts: Decimal
+    railcard_discounts: Decimal
+    advanced_discounts: Decimal
     transfer_price: Decimal
     path: List[RouteRead]
 

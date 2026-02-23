@@ -37,6 +37,8 @@ class GraphManager:
                 
                 edge_data = {
                     "route_id": route.id,
+                    "origin_city_loc": (route.origin_station.city.longitude, route.origin_station.city.latitude),
+                    "destination_city_loc": (route.destination_station.city.longitude, route.destination_station.city.latitude),
                     "destination_city": dest_city,
                     "origin_station_id": route.origin_station.id,
                     "destination_station_id": route.destination_station.id,
