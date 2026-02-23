@@ -2,20 +2,12 @@
 A RESTful API that estimates the cheapest journeys between any of the UK's 200 largest towns and cities via multiple modes of public transport.
 
 ## Table of Contents
-- [UK Lowest Cost Public Transport Options Route Finder](#uk-lowest-cost-public-transport-options-route-finder)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Quick Start](#quick-start)
-    - [Run Locally via Uvicorn on Linux](#run-locally-via-uvicorn-on-linux)
-    - [Database](#database)
-  - [Architecture and Design](#architecture-and-design)
-    - [System Overview](#system-overview)
-    - [Business Logic](#business-logic)
-    - [Data Modeling](#data-modeling)
-  - [Datasets and Sources](#datasets-and-sources)
-    - [Scripts Usage](#scripts-usage)
-  - [API Documentation](#api-documentation)
-  - [Testing](#testing)
+
+- [Quick Start](#quick-start)
+- [Architecture and Design](#architecture-and-design)
+- [Datasets and Sources](#datasets-and-sources)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
 
 ## Features
 - Find cheap public transport journeys between 200 largest UK towns and cities.
