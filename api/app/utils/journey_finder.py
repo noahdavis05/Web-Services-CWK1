@@ -2,6 +2,8 @@ import heapq
 from fastapi_cache.decorator import cache
 from math import radians, sin, cos, sqrt, atan2
 
+GENERAL_CHANGEOVER_COST = 20 # a general cost added to each changeover to punish routes with too many legs
+
 
 @cache(expire=3600)
 async def find_cheapest_path(graph_manager, start_id, finish_id, railcard_discount, advanced = True):
@@ -48,9 +50,9 @@ async def find_cheapest_path(graph_manager, start_id, finish_id, railcard_discou
 
             # calculate the costs
             if edge["transport_mode_id"] == 2: # rail       
-                new_cost = current_cost + edge["price"] * discount_multiplier * advanced_multiplier + 20 # add a general + 10. This punishes routes which have lots of changes, but doesn't show on the final price
+                new_cost = current_cost + edge["price"] * discount_multiplier * advanced_multiplier + GENERAL_CHANGEOVER_COST 
             else:
-                new_cost = current_cost + edge["price"] + 20 # coach fares don't get the discount as this if for railcards
+                new_cost = current_cost + edge["price"] + GENERAL_CHANGEOVER_COST
 
             this_ticket_price = edge["price"]
             this_discount = 0
