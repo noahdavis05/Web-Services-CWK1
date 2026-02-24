@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/id", response_model=schemas.JourneyRead, status_code=200)
-async def get_journey(origin_id: int, destination_id: int, railcard_discount: int = 0,db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+async def get_journey(origin_id: int, destination_id: int, railcard_discount: int = 0, advanced_fares: bool = False, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
     # Fetch a Journey
     
@@ -28,7 +28,7 @@ async def get_journey(origin_id: int, destination_id: int, railcard_discount: in
     graph_manager = GraphManager() # gets us our instance of our singleton class
     
 
-    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id, railcard_discount)
+    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id, railcard_discount, advanced_fares)
     if not cheapest_path:
         raise HTTPException(status_code=404, detail="No journey found")
     
@@ -49,7 +49,7 @@ async def get_journey(origin_id: int, destination_id: int, railcard_discount: in
 
 
 @router.get("/name", response_model=schemas.JourneyRead, status_code=200)
-async def get_journey(origin_name: str, destination_name: str, railcard_discount: int = 0, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+async def get_journey(origin_name: str, destination_name: str, railcard_discount: int = 0, advanced_fares: bool = False, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
     # Fetch a Journey
     
@@ -75,11 +75,10 @@ async def get_journey(origin_name: str, destination_name: str, railcard_discount
     graph_manager = GraphManager() # gets us our instance of our singleton class
     
 
-    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id, railcard_discount)
+    cheapest_path = await find_cheapest_path(graph_manager, origin_id, destination_id, railcard_discount, advanced_fares)
     if not cheapest_path:
         raise HTTPException(status_code=404, detail="No journey found")
-    
-    print(cheapest_path)
+
 
     # now need to get all the paths from the db in order
     all_routes = []
