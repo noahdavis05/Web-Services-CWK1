@@ -1,10 +1,22 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from .supabase_client import supabase
+from ..config import settings
 
 security = HTTPBearer()
 
+
+# mock fake admin user for when authentication is turned off
+class FakeUser:
+    def __init__(self):
+        self.user_metadata = {"role": "admin"}
+
+fake_admin = FakeUser()
+
 def get_current_user(token: HTTPAuthorizationCredentials = Depends(security)):
+    if not settings.AUTHENTICATION_ON:
+        return fake_admin
+    
     try:
         response = supabase.auth.get_user(token.credentials)
         if not response.user:
@@ -20,6 +32,9 @@ def get_current_user(token: HTTPAuthorizationCredentials = Depends(security)):
 
 def validate_user_role(allowed_roles: list[str]):
     def role_checker(user = Depends(get_current_user)):
+        if not settings.AUTHENTICATION_ON:
+            return fake_admin
+        
         # Extract the role from user_metadata
         user_role = user.user_metadata.get("role")
         
