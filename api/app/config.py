@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     SUPABASE_URL: str
     SUPABASE_PUBLIC_KEY: str
     SUPABASE_SECRET_KEY: str
+    AUTHENTICATION_ON: bool
     model_config = SettingsConfigDict(env_file=".env")
 
 settings = Settings()

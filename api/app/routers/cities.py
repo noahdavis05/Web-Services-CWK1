@@ -21,8 +21,6 @@ def create_new_city(city: schemas.CityCreate, db: Session = Depends(get_db)):
 
     - **name**: City Name - Must be Unique. Example - "Leeds" - all cities are made fully lowercase.
     - **latitude/longitude**: Latitude and Longitude of the city..
-    
-    *Returns the created city object including its database-assigned ID.*
     """
     db_city = models.City(**city.model_dump())
     db.add(db_city)
@@ -37,7 +35,7 @@ def get_all_cities(db: Session = Depends(get_db)):
     """
     return db.query(models.City).all()
 
-@router.get("/id/{city_id}", response_model=schemas.CityRead)
+@router.get("/id/{city_id}", response_model=schemas.CityRead, responses={404: {"description": "City not found"}})
 def get_city_by_id(city_id: int, db: Session = Depends(get_db)):
     """
     # Get a city by ID
@@ -47,7 +45,7 @@ def get_city_by_id(city_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="City not found")
     return city
 
-@router.get("/name/{city_name}", response_model=schemas.CityRead)
+@router.get("/name/{city_name}", response_model=schemas.CityRead, responses={404: {"description": "City not found"}})
 def get_city_by_name(city_name: str, db: Session = Depends(get_db)):
     """
     # Get a city by its name
@@ -59,17 +57,13 @@ def get_city_by_name(city_name: str, db: Session = Depends(get_db)):
     return city
 
 
-@router.put("/{city_id}", response_model=schemas.CityRead, status_code=200)
+@router.put("/{city_id}", response_model=schemas.CityRead, status_code=200, responses={404: {"description": "City not found"}})
 def update_city(city_id: int, city_update: schemas.CityCreate, db: Session = Depends(get_db)):
     """
-    Docstring for update_city
-    
-    :param city_id: Description
-    :type city_id: int
-    :param city_update: Description
-    :type city_update: schemas.CityCreate
-    :param db: Description
-    :type db: Session
+    # Update a city
+
+    - **name**: City Name - Must be Unique. Example - "Leeds" - all cities are made fully lowercase.
+    - **latitude/longitude**: Latitude and Longitude of the city..
     """
     city = db.query(models.City).filter(models.City.id == city_id).first()
 

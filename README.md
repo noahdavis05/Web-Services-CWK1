@@ -3,11 +3,20 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
 
 ## Table of Contents
 
-- [Quick Start](#quick-start)
-- [Architecture and Design](#architecture-and-design)
-- [Datasets and Sources](#datasets-and-sources)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
+- [UK Lowest Cost Public Transport Options Route Finder](#uk-lowest-cost-public-transport-options-route-finder)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Quick Start](#quick-start)
+    - [Run Locally via Uvicorn on Linux](#run-locally-via-uvicorn-on-linux)
+    - [Database](#database)
+  - [Architecture and Design](#architecture-and-design)
+    - [System Overview](#system-overview)
+    - [Business Logic](#business-logic)
+    - [Data Modeling](#data-modeling)
+  - [Datasets and Sources](#datasets-and-sources)
+    - [Scripts Usage](#scripts-usage)
+  - [API Documentation](#api-documentation)
+  - [Testing](#testing)
 
 ## Features
 - Find cheap public transport journeys between 200 largest UK towns and cities.
@@ -29,8 +38,11 @@ DATABASE_URL=sqlite:///./test.db
 SUPABASE_URL=YOUR_SUPABASE_URL
 SUPABASE_PUBLIC_KEY=YOUR_PUBLISHABLE_KEY
 SUPABASE_SECRET_KEY=YOUR_SECRET_KEY
+AUTHENTICATION_ON=true
 ```
+You can either turn off authentication by setting `AUTHENTICATION_ON=false`, or can set up the a Supabase account.
 [Create a free Supabase account](https://supabase.com/), create a new project, and get the Project URL, Publishable key and Secret key. Put these into the `.env` file. 
+Whichever option you choose, the other values still need to be present in the `.env` file but the supabase values can be anything.
 
 After creating your account, go into the authentication dashboard on supabase, and manually update your account from 'user' to 'admin'. You can find this in the user metadata.
 
