@@ -12,10 +12,15 @@ router = APIRouter(
     dependencies=[Depends(validate_user_role(["admin"]))]
 )
 
-@router.post("/", response_model=schemas.StationRead, status_code=201)
+@router.post("/", response_model=schemas.StationRead, status_code=201, responses={404: {"description": "City not found"}})
 def create_new_station(station: schemas.StationCreate, db: Session = Depends(get_db)):
     """
-    Create a new Station
+    # Create a new Station
+
+    Validates that the city exists, otherwise throws 404 Error.
+
+    - **name**: Name of the station.
+    - **city_id**: ID of the city this station belongs to.
     """
     # check the city exists
     city = db.query(models.City).filter(models.City.id == station.city_id).first()
@@ -37,14 +42,14 @@ def create_new_station(station: schemas.StationCreate, db: Session = Depends(get
 @router.get("/", response_model=List[schemas.StationRead])
 def get_all_stations(db: Session = Depends(get_db)):
     """
-    Get all stations
+    # Get all stations
     """
     return db.query(models.Station).all()
 
-@router.get("/{station_id}", response_model=schemas.StationRead)
+@router.get("/{station_id}", response_model=schemas.StationRead, responses={404: {"description": "Station not found"}})
 def get_station_by_id(station_id: int, db: Session = Depends(get_db)):
     """
-    Get station by ID
+    # Get station by ID
     """
     station = db.query(models.Station).filter(models.Station.id == station_id).first()
 

@@ -17,7 +17,7 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
     """
     # Create a new travel route
 
-    Validates that the provided stations and transport mode exist before establishing the link.
+    Validates that the provided stations and transport mode exist otherwise throws 404 error.
     
     - **origin_station_id**: ID of the starting station.
     - **destination_station_id**: ID of the arrival station.
@@ -47,8 +47,9 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
 def get_all_routes(db: Session = Depends(get_db)):
     """
     # List all travel routes
+    Gets every route between cities from the database.
 
-    Returns a comprehensive list of all routes, including nested station and city details.
+    **Note** - There are almost 20,000 routes in the database. This API endpoint does work, but this amount of data will crash the browser if tested.
     """
     return db.query(models.Route).all()
 
