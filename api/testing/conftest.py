@@ -41,9 +41,71 @@ def mock_graph_manager(monkeypatch):
     Mocks the graph manager singleton class - therefore we don't download all the routes from db
     """
     mock_gm_instance = MagicMock()
+
+    # create a few mock routes for the tests
+    mock_gm_instance.graph = { 
+        ## simple mock route from leeds to Bath
+        8: [
+                {
+                "route_id": 1,
+                "origin_city_loc": (53, 1.5),
+                "destination_city_loc": (51, 2),
+                "destination_city":  120,
+                "origin_station_id": 224,
+                "destination_station_id": 120,
+                "price": 100.00,
+                "transport_mode_id": 2
+            },
+            {
+                "route_id": 275,
+                "origin_city_loc": (53.797500, -1.543600),
+                "destination_city_loc": (57.150000, -2.110000), 
+                "destination_city": 55,
+                "origin_station_id": 3, 
+                "destination_station_id": 4,  
+                "price": 17.99,
+                "transport_mode_id": 1 
+            },
+            {
+                "route_id": 616,
+                "origin_city_loc": (53.797500, -1.543600),
+                "destination_city_loc": (57.150000, -2.110000), 
+                "destination_city": 55,
+                "origin_station_id": 3, 
+                "destination_station_id": 4,  
+                "price": 100,
+                "transport_mode_id": 2
+            }
+        ],
+        ## Complex mock route from exeter to aberdeen
+        86: [  
+            {
+                "route_id": 183,
+                "origin_city_loc": (50.725600, -3.526900),  
+                "destination_city_loc": (51.453600, -2.597500),  
+                "destination_city": 5,
+                "origin_station_id": 1,  
+                "destination_station_id": 2, 
+                "price": 5.50,
+                "transport_mode_id": 1  
+            }
+        ],
+        5: [ 
+            {
+                "route_id": 90,
+                "origin_city_loc": (51.453600, -2.597500),
+                "destination_city_loc": (53.797500, -1.543600), 
+                "destination_city": 8,
+                "origin_station_id": 2,  
+                "destination_station_id": 3, 
+                "price": 8.50,
+                "transport_mode_id": 1  
+            }
+        ],
+    }
     
-    monkeypatch.setattr("app.main.GraphManager", lambda: mock_gm_instance)
-    
+    monkeypatch.setattr("app.routers.journeys.GraphManager", lambda: mock_gm_instance)
+
     return mock_gm_instance
 
 ## Mock for verifying authentication for all endpoints
