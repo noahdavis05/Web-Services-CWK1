@@ -5,9 +5,9 @@ from typing import Optional, List
 
 # CITY SCHEMAS
 class CityBase(BaseModel):
-    name: str 
-    latitude: Decimal = Field(..., max_digits=10, decimal_places=6)
-    longitude: Decimal = Field(..., max_digits=10, decimal_places=6)
+    name: str = Field(..., example="Leeds")
+    latitude: Decimal = Field(..., max_digits=10, decimal_places=6, example=53.79)
+    longitude: Decimal = Field(..., max_digits=10, decimal_places=6, example=1.61)
 
     @field_validator('name')
     @classmethod
@@ -18,15 +18,15 @@ class CityCreate(CityBase):
     pass
 
 class CityRead(CityBase):
-    id: int
+    id: int = Field(..., example=1)
     model_config = ConfigDict(from_attributes=True)
 
 
 
 # STATION SCHEMAS
 class StationBase(BaseModel):
-    name: str 
-    city_id: int 
+    name: str = Field(..., example="Leeds Station")
+    city_id: int = Field(..., example=1)
 
     @field_validator('name')
     @classmethod
@@ -37,8 +37,6 @@ class StationCreate(StationBase):
     pass
 
 class StationRead(StationBase):
-    id: int 
-    name: str 
     city: CityRead
     model_config = ConfigDict(from_attributes=True)
 
@@ -46,7 +44,7 @@ class StationRead(StationBase):
 
 # TRANSPORT MODE SCHEMAS
 class TransportModeBase(BaseModel):
-    name: str
+    name: str = Field(..., example="train")
 
     @field_validator('name')
     @classmethod
@@ -57,15 +55,15 @@ class TransportModeCreate(TransportModeBase):
     pass
 
 class TransportModeRead(TransportModeBase):
-    id: int
+    id: int = Field(..., example=1)
     model_config = ConfigDict(from_attributes=True)
 
 
 
 # ROUTE SCHEMAS
 class RouteBase(BaseModel):
-    price: Decimal = Field(..., max_digits=10, decimal_places=2)
-    notes: Optional[str] = None
+    price: Decimal = Field(..., max_digits=10, decimal_places=2, example=12.50)
+    notes: Optional[str] = Field(..., example="Northern Rail Service")
 
 # Fields required when CREATING a route (via POST)
 class RouteCreate(RouteBase):
@@ -75,7 +73,7 @@ class RouteCreate(RouteBase):
 
 # Fields returned when READING a route (via GET)
 class RouteRead(RouteBase):
-    id: int
+    id: int = Field(..., example=1)
     origin_station: StationRead
     destination_station: StationRead
     transport_mode: TransportModeRead
@@ -84,11 +82,11 @@ class RouteRead(RouteBase):
 
 # JOURNEY SCHEMAS - This is the result of our Dijkstra. We return the cheapest route
 class JourneyRead(BaseModel):
-    total_price: Decimal
-    ticket_price: Decimal
-    railcard_discounts: Decimal
-    advanced_discounts: Decimal
-    transfer_price: Decimal
+    total_price: Decimal = Field(..., example=12.50)
+    ticket_price: Decimal = Field(..., example=12.50)
+    railcard_discounts: Decimal = Field(..., example=0.00)
+    advanced_discounts: Decimal = Field(..., example=0.00)
+    transfer_price: Decimal = Field(..., example=0.00)
     path: List[RouteRead]
 
     model_config = ConfigDict(from_attributes=True)

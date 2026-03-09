@@ -39,9 +39,42 @@ async def lifespan(app: FastAPI):
         db.close()
     
     yield
+
+
+# Extra tags for documentation
+tags_metadata = [
+    {
+        "name": "Travel Routes",
+        "description": "The individual intercity legs which make up a Journey."
+    },
+    {
+        "name": "Cities",
+        "description": "The 200 largest UK cities with latitude and longitude."
+    },
+    {
+        "name": "Stations"
+    },
+    {
+        "name": "Transport Modes",
+        "description": "Categorises routes based on transport mode such as 'train' or 'coach'."
+    },
+    {
+        "name": "Journeys",
+        "description": "A collection of Travel Routes which makes a journey between any two given cities. This will return the cheapest possible combination of Travel Routes to complete a journey, as well as cost breakdown."
+    },
+    {
+        "name": "Authentication",
+        "description": "Endpoints to authenticate users via Supabase."
+    }
+]
     
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title="Cheap Public Transport API",
+    description="This API find the cheapest journey between UK cities via public transport. This combines national rail services, FlixBus coaches, and National Express coaches.",
+    openapi_tags=tags_metadata
+)
 
 app.include_router(routes.router)
 app.include_router(cities.router)

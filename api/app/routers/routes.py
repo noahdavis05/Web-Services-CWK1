@@ -6,8 +6,6 @@ from ..database import get_db
 from .. import models, schemas
 from ..utils.verify_auth_token import validate_user_role
 
-# create a router - similar to a mini-app for endpoints to do with 
-# routes between cities
 router = APIRouter(
     prefix="/routes",
     tags=["Travel Routes"], # for the docs, keeps these endpoints together
@@ -19,7 +17,7 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
     """
     # Create a new travel route
 
-    Validates that the provided stations and transport mode exist before establishing the link.
+    Validates that the provided stations and transport mode exist otherwise throws 404 error.
     
     - **origin_station_id**: ID of the starting station.
     - **destination_station_id**: ID of the arrival station.
@@ -49,12 +47,13 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
 def get_all_routes(db: Session = Depends(get_db)):
     """
     # List all travel routes
+    Gets every route between cities from the database.
 
-    Returns a comprehensive list of all routes, including nested station and city details.
+    **Note** - There are almost 20,000 routes in the database. This API endpoint does work, but this amount of data will crash the browser if tested.
     """
     return db.query(models.Route).all()
 
-@router.get("/{route_id}", response_model=schemas.RouteRead)
+@router.get("/{route_id}", response_model=schemas.RouteRead, responses={404: {"description": "Route not found"}})
 def get_route_by_id(route_id: int, db: Session = Depends(get_db)):
     """
     # Get specific route details
@@ -69,7 +68,7 @@ def get_route_by_id(route_id: int, db: Session = Depends(get_db)):
 
     return route
 
-@router.delete("/{route_id}", status_code=204)
+@router.delete("/{route_id}", status_code=204, responses={404: {"description": "Route not found"}})
 def delete_route(route_id: int, db: Session = Depends(get_db)):
     """
     # Delete a route
@@ -86,7 +85,7 @@ def delete_route(route_id: int, db: Session = Depends(get_db)):
     db.commit()
     return None
 
-@router.put("/{route_id}", response_model=schemas.RouteRead, status_code=200)
+@router.put("/{route_id}", response_model=schemas.RouteRead, status_code=200, responses={404: {"description": "Route not found"}})
 def update_route(route_id: int, route_update: schemas.RouteCreate, db: Session = Depends(get_db)):
     """
     # Update an entire route 
@@ -105,7 +104,7 @@ def update_route(route_id: int, route_update: schemas.RouteCreate, db: Session =
     transport_mode = db.query(models.TransportMode).filter(models.TransportMode.id == route_update.transport_mode_id).first()
     
     if not origin_station or not destination_station or not transport_mode:
-        raise HTTPException(status_code=404, detail="Invalid station or transport mode")
+        raise HTTPException(status_code=404, detail="Station, or transport mode not found.")
     
     # Update route fields
     for key, value in route_update.model_dump().items():
