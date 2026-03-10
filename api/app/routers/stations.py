@@ -9,18 +9,24 @@ from ..utils.verify_auth_token import validate_user_role
 router = APIRouter(
     prefix="/stations",
     tags=["Stations"],
-    dependencies=[Depends(validate_user_role(["admin"]))]
 )
 
 @router.post("/", response_model=schemas.StationRead, status_code=201, responses={404: {"description": "City not found"}})
-def create_new_station(station: schemas.StationCreate, db: Session = Depends(get_db)):
+def create_new_station(station: schemas.StationCreate, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin"]))):
     """
-    # Create a new Station
+    ### Create a new station
+    Adds a new station record to the database after verifying the associated city exists.
 
-    Validates that the city exists, otherwise throws 404 Error.
+    **Access Level:** - Admin only.
 
-    - **name**: Name of the station.
-    - **city_id**: ID of the city this station belongs to.
+    **Args:**
+    - **station**: Schema containing the station name and city ID.
+    - **db**: Database session dependency.
+
+    **Errors:**
+    - **401**: Unauthorized - Missing or invalid authentication token.
+    - **403**: Forbidden - User does not have administrative privileges.
+    - **404**: Not Found - If the provided `city_id` does not match any existing city.
     """
     # check the city exists
     city = db.query(models.City).filter(models.City.id == station.city_id).first()
@@ -40,16 +46,41 @@ def create_new_station(station: schemas.StationCreate, db: Session = Depends(get
     return db_station
 
 @router.get("/", response_model=List[schemas.StationRead])
-def get_all_stations(db: Session = Depends(get_db)):
+def get_all_stations(db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
-    # Get all stations
+    ### Get all stations
+    Retrieves a complete list of all stations stored in the database.
+
+    **Access Level:** - Admin and User.
+
+    **Args:**
+    - **db**: Database session dependency.
+
+    **Returns:**
+    - A list of Station objects.
+
+    **Errors:**
+    - **401**: Unauthorized - Missing or invalid authentication token.
+    - **403**: Forbidden - User role not recognized.
     """
     return db.query(models.Station).all()
 
 @router.get("/{station_id}", response_model=schemas.StationRead, responses={404: {"description": "Station not found"}})
-def get_station_by_id(station_id: int, db: Session = Depends(get_db)):
+def get_station_by_id(station_id: int, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
-    # Get station by ID
+    ### Get station by ID
+    Fetches the details of a specific station using its unique integer ID.
+
+    **Access Level:** - Admin and User.
+
+    **Args:**
+    - **station_id**: The unique identifier of the station.
+    - **db**: Database session dependency.
+
+    **Errors:**
+    - **401**: Unauthorized - Missing or invalid authentication token.
+    - **403**: Forbidden - User role not recognized.
+    - **404**: Not Found - If no station exists with the provided ID.
     """
     station = db.query(models.Station).filter(models.Station.id == station_id).first()
 

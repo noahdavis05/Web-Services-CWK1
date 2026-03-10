@@ -17,12 +17,29 @@ router = APIRouter(
 @router.get("/id", response_model=schemas.JourneyRead, status_code=200)
 async def get_journey(origin_id: int, destination_id: int, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
-    # Fetch a Journey
-    
-    A journey is a route between any two cities within the cities table.
-    This route returns the cheapest possible route by default.
-    It returns all legs of the journey.
-    **Note** - The sum of the prices of all legs doesn't equal the total price. This is because we only add a £2 changeover fee at each stop where the stations aren't the same.
+    ### Fetch a journey by city IDs
+    Calculates the cheapest route between two cities using their unique integer IDs.
+
+    **Access Level:** - Admin and User.
+
+    **Args:**
+    - **origin_id**: ID of the starting city.
+    - **destination_id**: ID of the destination city.
+    - **railcard_discount**: Percentage discount to apply (default 0).
+    - **advanced_fares**: Whether to include advanced fare pricing estimate.
+    - **max_coach_legs**: Maximum number of coach segments allowed.
+
+    **Returns:**
+    - A breakdown of total costs and a list of journey legs.
+
+    **Errors:**
+    - **401**: Unauthorized - Missing or invalid authentication token.
+    - **403**: Forbidden - User role not recognized.
+    - **404**: Not Found - No journey could be calculated between the provided IDs.
+
+    **Notes:**
+    - Total price includes a £2 changeover fee for station transfers.
+    - Returns the full path including all journey legs.
     """
     
     graph_manager = GraphManager() # gets us our instance of our singleton class
@@ -51,12 +68,28 @@ async def get_journey(origin_id: int, destination_id: int, railcard_discount: in
 @router.get("/name", response_model=schemas.JourneyRead, status_code=200)
 async def get_journey(origin_name: str, destination_name: str, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
-    # Fetch a Journey
-    
-    A journey is a route between any two cities within the cities table.
-    This route returns the cheapest possible route by default.
-    It returns all legs of the journey.
-    **Note** - The sum of the prices of all legs doesn't equal the total price. This is because we only add a £2 changeover fee at each stop where the stations aren't the same.
+    ### Fetch a journey by city names
+    Calculates the cheapest route between two cities using their string names.
+
+    **Access Level:** - Admin and User.
+
+    **Args:**
+    - **origin_name**: Name of the starting city (case-insensitive).
+    - **destination_name**: Name of the destination city (case-insensitive).
+    - **railcard_discount**: Percentage discount to apply (default 0).
+    - **advanced_fares**: Whether to include advanced fare pricing estimate.
+    - **max_coach_legs**: Maximum number of coach segments allowed.
+
+    **Returns:**
+    - A breakdown of total costs and a list of journey legs.
+
+    **Errors:**
+    - **401**: Unauthorized - Missing or invalid authentication token.
+    - **403**: Forbidden - User role not recognized.
+    - **404**: Not Found - If either city name does not exist or no path is found.
+
+    **Notes:**
+    - Total price includes a £2 changeover fee for station transfers.
     """
 
     # get both the origin and destination IDs from the names
