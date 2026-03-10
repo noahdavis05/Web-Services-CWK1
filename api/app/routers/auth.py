@@ -11,6 +11,19 @@ router = APIRouter(
 
 @router.post("/signup", response_model=schemas.SignupResponse)
 def signup(data: schemas.AuthSchema):
+    """
+    ### Register a new account
+    Creates a new user record in Supabase with a default 'user' role.
+
+    **Args:**
+    - **data**: Schema containing the user's email and password.
+
+    **Returns:**
+    - A success message and the unique Supabase user ID.
+
+    **Errors:**
+    - **400**: If the email is already registered or the password does not meet requirements.
+    """
     try:
         response = supabase.auth.sign_up({
             "email": data.email,
@@ -28,6 +41,21 @@ def signup(data: schemas.AuthSchema):
 
 @router.post("/login", response_model=schemas.LoginResponse)
 def login(data: schemas.AuthSchema):
+    """
+    ### Authenticate user
+    Verifies credentials and returns a set of JWT tokens for subsequent requests.
+
+    **Args:**
+    - **data**: Schema containing the user's email and password.
+
+    **Returns:**
+    - **access_token**: The Bearer token used for authorization headers.
+    - **refresh_token**: Used to obtain a new access token when it expires.
+    - **token_type**: Always returns 'bearer'.
+
+    **Errors:**
+    - **401**: If the email or password credentials are incorrect.
+    """
     try:
         response = supabase.auth.sign_in_with_password({
             "email": data.email,
