@@ -29,7 +29,10 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
 ## Quick Start
 ### Run Locally via Uvicorn on Linux
 **Pre-requisites** <br>
+There are two ways to run the application: with, or without authentication. Running without authentication is easier for development, as there is no need to create a Supabase account. This is all controlled through the `.env` file.<br>
 Create a `.env` file in /api dir. Format shown below:
+<br>
+**With Authentication** 
 ```
 # local sqlite3 db included in this repo
 DATABASE_URL=sqlite:///./test.db
@@ -40,11 +43,18 @@ SUPABASE_PUBLIC_KEY=YOUR_PUBLISHABLE_KEY
 SUPABASE_SECRET_KEY=YOUR_SECRET_KEY
 AUTHENTICATION_ON=true
 ```
-You can either turn off authentication by setting `AUTHENTICATION_ON=false`, or can set up the a Supabase account.
-[Create a free Supabase account](https://supabase.com/), create a new project, and get the Project URL, Publishable key and Secret key. Put these into the `.env` file. 
-Whichever option you choose, the other values still need to be present in the `.env` file but the supabase values can be anything.
 
-After creating your account, go into the authentication dashboard on supabase, and manually update your account from 'user' to 'admin'. You can find this in the user metadata.
+**Without Authentication**
+```
+# local sqlite3 db included in this repo
+DATABASE_URL=sqlite:///./test.db
+
+# env variables for supabase auth
+SUPABASE_URL=anything
+SUPABASE_PUBLIC_KEY=anything
+SUPABASE_SECRET_KEY=anything
+AUTHENTICATION_ON=false
+```
 
 **Follow these steps to run**
 ```
@@ -86,7 +96,7 @@ To work out the cheapest route between the UK's 200 largest cities and towns I u
 
     | Dataset | Link | Notes |
     | ------- | ---- | ----- |
-    |Fares Dataset | https://opendata.nationalrail.co.uk/feeds | **Need to find liscence** |
+    | Fares Dataset | https://opendata.nationalrail.co.uk/feeds https://wiki.openraildata.com/index.php/Fares_Data | National Rail Liscence (Had to apply for access to use in a University project) |
     | NaPTAN Dataset | https://www.data.gov.uk/dataset/ff93ffc1-6656-47d8-9155-85ea0b8f2251/naptan | Open Government Licence |
     | RailReferences | https://gist.github.com/crablab/93a50eeb338646614287eddc3c2776b1 | From Github user crablab, which has modified the NaPTAN dataset under same licence |
    
@@ -153,6 +163,7 @@ DATABASE_URL=sqlite:///./testing/test.db
 SUPABASE_URL=ANY_WEBSITE_URL
 SUPABASE_PUBLIC_KEY=temp
 SUPABASE_SECRET_KEY=temp
+AUTHENTICATION_ON=true
 ```
 
 Then run the following commands to run the tests:

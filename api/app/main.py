@@ -75,6 +75,15 @@ app = FastAPI(
     description="This API find the cheapest journey between UK cities via public transport. This combines national rail services, FlixBus coaches, and National Express coaches.",
     openapi_tags=tags_metadata
 )
+from fastapi.middleware.cors import CORSMiddleware
+# Add this block!
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # This allows ANY site (including your local file) to access the API
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(routes.router)
 app.include_router(cities.router)
