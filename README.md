@@ -72,7 +72,7 @@ Using the included sqlite3 database is recomended, but you can create and popula
 ## API Documentation
 Swagger UI documentation can be found [online here](https://routesapi-871656980184.europe-west1.run.app/docs#). This documentation also allows you to test out these endpoints. This is hosted on a serverless platform so will scale to zero, and may take a while to load on first attempt.
 
-Or PDF documentation can be found in the `/documentation` directory [here in this repo](documentation/Documentation.pdf).
+Or PDF documentation can be found in the `/documentation` directory [here in this repo](documentation/Documentation.pdf). These docs were made through the [**rapipdf** tool](https://mrin9.github.io/RapiPdf/).
 
 ## Architecture and Design
 ### System Overview
