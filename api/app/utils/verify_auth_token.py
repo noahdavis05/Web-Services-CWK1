@@ -11,6 +11,7 @@ class FakeUser:
     def __init__(self):
         self.user_metadata = {"role": "admin"}
 
+# MCP user only gets user roles
 class MCPUser:
     def __init__(self):
         self.user_metadata = {"role": "user"}
@@ -22,6 +23,8 @@ def get_current_user(token: HTTPAuthorizationCredentials = Depends(security)):
     if not settings.AUTHENTICATION_ON:
         return fake_admin
     
+    # MCP can either use a set token, or the user can login manually
+    # and give the MCP server their bearer token.
     if token.credentials == settings.MCP_INTERNAL_KEY:
         return mcpUser
     

@@ -10,6 +10,7 @@ from . import models
 
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
+from fastapi.middleware.cors import CORSMiddleware
 
 # on startup we load our graph of all routes into singleton class
 # this class will be used to avoid fetching all 30,000 routes from 
@@ -77,10 +78,9 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
-# This block is only used when running locally and we want to run
-# rapipdf JS to convert our api into PDF. it stops CORS issues.
 
-from fastapi.middleware.cors import CORSMiddleware
+# allows cross origin requests. used for rapipdf to generate docs
+# and from mcp sites such as MCP inspector
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
