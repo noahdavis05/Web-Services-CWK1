@@ -11,11 +11,19 @@ class FakeUser:
     def __init__(self):
         self.user_metadata = {"role": "admin"}
 
+class MCPUser:
+    def __init__(self):
+        self.user_metadata = {"role": "user"}
+
 fake_admin = FakeUser()
+mcpUser = MCPUser()
 
 def get_current_user(token: HTTPAuthorizationCredentials = Depends(security)):
     if not settings.AUTHENTICATION_ON:
         return fake_admin
+    
+    if token.credentials == settings.MCP_INTERNAL_KEY:
+        return mcpUser
     
     try:
         response = supabase.auth.get_user(token.credentials)
