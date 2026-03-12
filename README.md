@@ -10,6 +10,9 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
     - [Run Locally via Uvicorn on Linux](#run-locally-via-uvicorn-on-linux)
     - [Database](#database)
   - [API Documentation](#api-documentation)
+  - [MCP](#mcp)
+    - [Connecting to an AI client](#connecting-to-an-ai-client)
+    - [Roo Code Example](#roo-code-example)
   - [Architecture and Design](#architecture-and-design)
     - [System Overview](#system-overview)
     - [Business Logic](#business-logic)
@@ -24,7 +27,7 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
 - FlixBus and National Express coaches used.
 - Railcard discounts included.
 - Advanced Single rail fair estimation.
-- Add your own routes.
+- MCP server.
 
 ## Quick Start
 ### Run Locally via Uvicorn on Linux
@@ -42,6 +45,7 @@ SUPABASE_URL=YOUR_SUPABASE_URL
 SUPABASE_PUBLIC_KEY=YOUR_PUBLISHABLE_KEY
 SUPABASE_SECRET_KEY=YOUR_SECRET_KEY
 AUTHENTICATION_ON=true
+MCP_INTERNAL_KEY=YOUR_SECRET_MCP_KEY
 ```
 
 **Without Authentication**
@@ -54,6 +58,7 @@ SUPABASE_URL=anything
 SUPABASE_PUBLIC_KEY=anything
 SUPABASE_SECRET_KEY=anything
 AUTHENTICATION_ON=false
+MCP_INTERNAL_KEY=YOUR_SECRET_MCP_KEY
 ```
 
 **Follow these steps to run**
@@ -73,6 +78,33 @@ Using the included sqlite3 database is recomended, but you can create and popula
 Swagger UI documentation can be found [online here](https://routesapi-871656980184.europe-west1.run.app/docs#). This documentation also allows you to test out these endpoints. This is hosted on a serverless platform so will scale to zero, and may take a while to load on first attempt.
 
 Or PDF documentation can be found in the `/documentation` directory [here in this repo](documentation/Documentation.pdf). These docs were made through the [**rapipdf** tool](https://mrin9.github.io/RapiPdf/).
+
+## MCP
+This API supports MCP, this is only enabled for getting a journey between two cities. This allows AI assistants/tools to interact natively with the API. This was implemented through the `fastapi_mcp` library.
+### Connecting to an AI client
+**Prerequisites** - To authenticate the MCP client you must set a `MCP_INTERNAL_KEY` in your .env file. This bypasses full authentication for your MCP client as long as you set this value in the headers shown below. Or alternatively, you can manually log in using the `/auth/login` endpoint, and use this bearer token in the headers shown below.
+
+To connect this API as a tool with an MCP client such as Claude Desktop, or Roo Code, use this configuration:
+- **Transport Type** - SSE
+- **URL** - Local - http://127.0.0.1:8000/mcp | Deployed - https://routesapi-871656980184.europe-west1.run.app/mcp
+- **Headers** - `Authorization Bearer <token>`
+### Roo Code Example
+This has only been tested through the Roo Code VSCode extension. To do this, download the extension Roo Code, choose a LLM provider, and go to MCP servers tab. Here click `Edit Global MCP`, and set the `json` file it opens to this:
+```
+{
+  "mcpServers": {
+    "journey-planner": {
+      "type": "sse",
+      "url": "YOUR_URL",
+      "headers": {
+        "Authorization": "Bearer YOUR_KEY"
+      }
+    }
+  }
+}
+```
+
+
 
 ## Architecture and Design
 ### System Overview
@@ -163,6 +195,7 @@ SUPABASE_URL=ANY_WEBSITE_URL
 SUPABASE_PUBLIC_KEY=temp
 SUPABASE_SECRET_KEY=temp
 AUTHENTICATION_ON=true
+MCP_INTERNAL_KEY=YOUR_SECRET_MCP_KEY
 ```
 
 Then run the following commands to run the tests:

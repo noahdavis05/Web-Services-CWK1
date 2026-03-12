@@ -24,7 +24,8 @@ router = APIRouter(
         401: {"description": "Unauthorized - Missing or invalid authentication token."},
         403: {"description": "Forbidden - User role not recognized."},
         404: {"description": "Not Found - No journey could be calculated between the provided IDs."}
-    }
+    },
+    operation_id="get_journey_by_id"
 )
 async def get_journey_by_id(origin_id: int, destination_id: int, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
@@ -71,7 +72,8 @@ async def get_journey_by_id(origin_id: int, destination_id: int, railcard_discou
         401: {"description": "Unauthorized - Missing or invalid authentication token."},
         403: {"description": "Forbidden - User role not recognized."},
         404: {"description": "Not Found - One or both city names do not exist, or no path was found."}
-    }
+    },
+    operation_id="get_journey_by_name"
 )
 async def get_journey_by_name(origin_name: str, destination_name: str, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """

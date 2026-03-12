@@ -16,6 +16,7 @@ jobs:
       SUPABASE_PUBLIC_KEY: "test-public"
       SUPABASE_SECRET_KEY: "test-secret"
       AUTHENTICATION_ON: "true"
+      MCP_INTERNAL_KEY: "key"
 
     steps:
       - name: Check Out Repo 
