@@ -9,20 +9,20 @@ router = APIRouter(
 )
 
 
-@router.post("/signup", response_model=schemas.SignupResponse)
+@router.post(
+    "/signup", 
+    response_model=schemas.SignupResponse,
+    responses={
+        400: {"description": "Bad Request - Email already registered or password does not meet requirements."},
+        422: {"description": "Validation Error - Improperly formatted request body."}
+    }
+)
 def signup(data: schemas.AuthSchema):
     """
     ### Register a new account
-    Creates a new user record in Supabase with a default 'user' role.
-
-    **Args:**
-    - **data**: Schema containing the user's email and password.
-
-    **Returns:**
-    - A success message and the unique Supabase user ID.
-
-    **Errors:**
-    - **400**: If the email is already registered or the password does not meet requirements.
+    Creates a new user record in the system with a default **'user'** role. 
+    
+    Once registered, the user can authenticate via the login endpoint to receive a JWT access token.
     """
     try:
         response = supabase.auth.sign_up({
@@ -39,22 +39,21 @@ def signup(data: schemas.AuthSchema):
         raise HTTPException(status_code=400, detail=str(e))
     
 
-@router.post("/login", response_model=schemas.LoginResponse)
+@router.post(
+    "/login", 
+    response_model=schemas.LoginResponse,
+    responses={
+        401: {"description": "Unauthorized - Invalid email or password credentials."},
+        422: {"description": "Validation Error - Improperly formatted request body."}
+    }
+)
 def login(data: schemas.AuthSchema):
     """
     ### Authenticate user
-    Verifies credentials and returns a set of JWT tokens for subsequent requests.
+    Verifies user credentials and returns a set of **JWT tokens** for subsequent requests.
 
-    **Args:**
-    - **data**: Schema containing the user's email and password.
-
-    **Returns:**
-    - **access_token**: The Bearer token used for authorization headers.
-    - **refresh_token**: Used to obtain a new access token when it expires.
-    - **token_type**: Always returns 'bearer'.
-
-    **Errors:**
-    - **401**: If the email or password credentials are incorrect.
+    The **access_token** must be provided in the 'Authorization' header as a 'Bearer' token for all protected endpoints. 
+    The **refresh_token** is used to obtain a new access token once the current one has expired.
     """
     try:
         response = supabase.auth.sign_in_with_password({

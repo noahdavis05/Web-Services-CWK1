@@ -11,24 +11,22 @@ router = APIRouter(
     tags=["Transport Modes"],
 )
 
-@router.post("/", response_model=schemas.TransportModeRead, status_code=201)
+@router.post(
+    "/", 
+    response_model=schemas.TransportModeRead, 
+    status_code=201,
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User does not have administrative privileges."},
+        422: {"description": "Validation Error - Improperly formatted request body."}
+    }
+)
 def create_new_transport_mode(transport_mode: schemas.TransportModeCreate, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin"]))):
     """
     ### Register a new transport mode
-    Adds a new category of transport (e.g., Train, Coach) to the system.
+    Adds a new category of transport (e.g., **Train**, **Coach**) to the system.
 
-    **Access Level:** - Admin only.
-
-    **Args:**
-    - **transport_mode**: Schema containing the name of the transport mode.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User does not have administrative privileges.
-
-    **Notes:**
-    - This creates a parent category that individual routes must be associated with.
+    **Access Level:** **Admin only**.
     """
     db_transport_mode = models.TransportMode(**transport_mode.model_dump())
     db.add(db_transport_mode)
@@ -36,42 +34,39 @@ def create_new_transport_mode(transport_mode: schemas.TransportModeCreate, db: S
     db.refresh(db_transport_mode)
     return db_transport_mode
 
-@router.get("/", response_model=List[schemas.TransportModeRead])
+@router.get(
+    "/", 
+    response_model=List[schemas.TransportModeRead],
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."}
+    }
+)
 def get_all_transport_mode(db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
     ### Retrieve all transport modes
-    Fetches a complete list of all available transport categories.
+    Fetches a complete list of all transport categories available in the database.
 
-    **Access Level:** - Admin and User.
+    **Access Level:** **Admin** and **User**.
 
-    **Args:**
-    - **db**: Database session dependency.
-
-    **Returns:**
-    - A list of TransportMode objects, useful for UI filters or dropdown menus.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
     """
     return db.query(models.TransportMode).all()
 
-@router.get("/{transport_mode_id}", response_model=schemas.TransportModeRead)
+@router.get(
+    "/{transport_mode_id}", 
+    response_model=schemas.TransportModeRead,
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."},
+        404: {"description": "Not Found - No transport mode exists with the provided ID."}
+    }
+)
 def get_transport_mode_by_id(transport_mode_id: int, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
     ### Get transport mode by ID
-    Retrieves the details of a specific transport category using its unique ID.
+    Retrieves the specific details of a transport category using its **unique integer ID**.
 
-    **Access Level:** - Admin and User.
-
-    **Args:**
-    - **transport_mode_id**: The unique identifier of the transport mode.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
-    - **404**: Not Found - If no transport mode exists with the provided ID.
+    **Access Level:** **Admin** and **User**.
     """
     transport_mode = db.query(models.TransportMode).filter(models.TransportMode.id == transport_mode_id).first()
     if not transport_mode:

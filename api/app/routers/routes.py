@@ -11,22 +11,23 @@ router = APIRouter(
     tags=["Travel Routes"], 
 )
 
-@router.post("/", response_model=schemas.RouteRead, status_code=201)
+@router.post(
+    "/", 
+    response_model=schemas.RouteRead, 
+    status_code=201,
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User does not have administrative privileges."},
+        404: {"description": "Not Found - The origin station, destination station, or transport mode ID does not exist."},
+        422: {"description": "Validation Error - Improperly formatted request body."}
+    }
+)
 def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin"]))):
     """
     ### Create a new travel route
-    Adds a new route record after validating that the stations and transport mode exist.
+    Adds a new route record to the network. The system validates that the **origin station**, **destination station**, and **transport mode** all exist before saving.
     
-    **Access Level:** - Admin only.
-
-    **Args:**
-    - **route**: Schema containing origin/destination station IDs, transport mode ID, and price.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User does not have administrative privileges.
-    - **404**: Not Found - If the origin station, destination station, or transport mode does not exist.
+    **Access Level:** **Admin only**.
     """
 
     # check if the start and end stations exist
@@ -47,45 +48,41 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db), 
     db.refresh(db_route)
     return db_route
 
-@router.get("/", response_model=List[schemas.RouteRead])
+@router.get(
+    "/", 
+    response_model=List[schemas.RouteRead],
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."}
+    }
+)
 def get_all_routes(db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
     ### List all travel routes
-    Retrieves every available route between stations from the database.
+    Retrieves a complete list of every available route between stations.
 
-    **Access Level:** - Admin and User.
-
-    **Args:**
-    - **db**: Database session dependency.
-
-    **Returns:**
-    - A list of all Route objects.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
+    **Access Level:** **Admin** and **User**.
 
     **Notes:**
-    - **Caution**: This dataset contains ~20,000 records. Testing this in a browser may cause performance issues or crashes.
+    - **Caution**: This dataset contains approximately **20,000 records**. Requesting this via a web browser may cause significant performance lag or crashes.
     """
     return db.query(models.Route).all()
 
-@router.get("/{route_id}", response_model=schemas.RouteRead, responses={404: {"description": "Route not found"}})
+@router.get(
+    "/{route_id}", 
+    response_model=schemas.RouteRead, 
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."},
+        404: {"description": "Not Found - No route exists with the provided ID."}
+    }
+)
 def get_route_by_id(route_id: int, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
     ### Get specific route details
-    Fetches the full details of a single travel route using its unique ID.
+    Fetches the full details of a single travel route, including its pricing and associated station IDs, using its **unique identifier**.
 
-    **Access Level:** - Admin and User.
-
-    **Args:**
-    - **route_id**: The unique identifier of the route.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
-    - **404**: Not Found - No route exists with the provided ID.
+    **Access Level:** **Admin** and **User**.
     """
     route = db.query(models.Route).filter(models.Route.id == route_id).first()
 
@@ -94,25 +91,25 @@ def get_route_by_id(route_id: int, db: Session = Depends(get_db), current_user =
 
     return route
 
-@router.delete("/{route_id}", status_code=204, responses={404: {"description": "Route not found"}})
+@router.delete(
+    "/{route_id}", 
+    status_code=204, 
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User does not have administrative privileges."},
+        404: {"description": "Not Found - No route exists with the provided ID."}
+    }
+)
 def delete_route(route_id: int, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin"]))):
     """
     ### Delete a route
     Permanently removes a specific route record from the database.
 
-    **Access Level:** - Admin only.
-
-    **Args:**
-    - **route_id**: The unique identifier of the route to be deleted.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User does not have administrative privileges.
-    - **404**: Not Found - No route exists with the provided ID.
+    **Access Level:** **Admin only**.
 
     **Notes:**
-    - This action is destructive but does not affect associated station or city records.
+    - This action is **destructive** and cannot be undone. 
+    - Associated station or city records are **not** affected by this operation.
     """
     route = db.query(models.Route).filter(models.Route.id == route_id).first()
     
@@ -123,23 +120,25 @@ def delete_route(route_id: int, db: Session = Depends(get_db), current_user = De
     db.commit()
     return None
 
-@router.put("/{route_id}", response_model=schemas.RouteRead, status_code=200, responses={404: {"description": "Route not found"}})
+@router.put(
+    "/{route_id}", 
+    response_model=schemas.RouteRead, 
+    status_code=200, 
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User does not have administrative privileges."},
+        404: {"description": "Not Found - The route, station, or transport mode was not found."}
+    }
+)
 def update_route(route_id: int, route_update: schemas.RouteCreate, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin"]))):
     """
     ### Update an entire route
-    Replaces an existing route's data. Validates the existence of related entities before saving.
+    Replaces an existing route's data. The system performs a full validation check on **station IDs** and **transport mode IDs** before applying the update.
 
-    **Access Level:** - Admin only.
+    **Access Level:** **Admin only**.
 
-    **Args:**
-    - **route_id**: The unique identifier of the route to update.
-    - **route_update**: The new data to apply to the route.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User does not have administrative privileges.
-    - **404**: Not Found - If the route, either station, or the transport mode is not found.
+    **Notes:**
+    - All fields must be included in the request body for the update to process.
     """
     route = db.query(models.Route).filter(models.Route.id == route_id).first()
     

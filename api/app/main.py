@@ -76,6 +76,19 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
+# This block is only used when running locally and we want to run
+# rapipdf JS to convert our api into PDF. it stops CORS issues.
+"""
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+"""
+
 app.include_router(routes.router)
 app.include_router(cities.router)
 app.include_router(stations.router)
