@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi_mcp import FastApiMCP
 from sqlalchemy.orm import Session, joinedload
 
 from .routers import routes, cities, stations, transport_modes, journeys, auth
@@ -78,7 +79,7 @@ app = FastAPI(
 
 # This block is only used when running locally and we want to run
 # rapipdf JS to convert our api into PDF. it stops CORS issues.
-"""
+
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
@@ -87,7 +88,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-"""
 
 app.include_router(routes.router)
 app.include_router(cities.router)
@@ -95,3 +95,12 @@ app.include_router(stations.router)
 app.include_router(transport_modes.router)
 app.include_router(journeys.router)
 app.include_router(auth.router)
+
+# add the MCP server, but only allow GET requests
+mcp = FastApiMCP(
+    app, 
+    name="JourneyExplorer",
+    include_operations=["get_journey_by_id", "get_journey_by_name"]
+)
+
+mcp.mount()
