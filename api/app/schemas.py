@@ -6,8 +6,8 @@ from typing import Optional, List
 # CITY SCHEMAS
 class CityBase(BaseModel):
     name: str = Field(..., example="Leeds")
-    latitude: Decimal = Field(..., max_digits=10, decimal_places=6, example=53.79)
-    longitude: Decimal = Field(..., max_digits=10, decimal_places=6, example=1.61)
+    latitude: Decimal = Field(..., ge=-90, le=90, example=53.79,  json_schema_extra={"pattern": None})
+    longitude: Decimal = Field(..., ge=-180, le=180, example=1.61, json_schema_extra={"pattern": None})
 
     @field_validator('name')
     @classmethod
@@ -62,8 +62,8 @@ class TransportModeRead(TransportModeBase):
 
 # ROUTE SCHEMAS
 class RouteBase(BaseModel):
-    price: Decimal = Field(..., max_digits=10, decimal_places=2, example=12.50)
-    notes: Optional[str] = Field(..., example="Northern Rail Service")
+    price: Decimal = Field(..., max_digits=10, decimal_places=2, example=12.50, json_schema_extra={"pattern": None})
+    notes: Optional[str] = Field(None, example="Northern Rail Service")
 
 # Fields required when CREATING a route (via POST)
 class RouteCreate(RouteBase):
@@ -82,11 +82,11 @@ class RouteRead(RouteBase):
 
 # JOURNEY SCHEMAS - This is the result of our Dijkstra. We return the cheapest route
 class JourneyRead(BaseModel):
-    total_price: Decimal = Field(..., example=12.50)
-    ticket_price: Decimal = Field(..., example=12.50)
-    railcard_discounts: Decimal = Field(..., example=0.00)
-    advanced_discounts: Decimal = Field(..., example=0.00)
-    transfer_price: Decimal = Field(..., example=0.00)
+    total_price: Decimal = Field(..., example=12.50, json_schema_extra={"pattern": None})
+    ticket_price: Decimal = Field(..., example=12.50, json_schema_extra={"pattern": None})
+    railcard_discounts: Decimal = Field(..., example=0.00, json_schema_extra={"pattern": None})
+    advanced_discounts: Decimal = Field(..., example=0.00, json_schema_extra={"pattern": None})
+    transfer_price: Decimal = Field(..., example=0.00, json_schema_extra={"pattern": None})
     path: List[RouteRead]
 
     model_config = ConfigDict(from_attributes=True)

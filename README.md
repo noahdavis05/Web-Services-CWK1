@@ -9,13 +9,13 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
   - [Quick Start](#quick-start)
     - [Run Locally via Uvicorn on Linux](#run-locally-via-uvicorn-on-linux)
     - [Database](#database)
+  - [API Documentation](#api-documentation)
   - [Architecture and Design](#architecture-and-design)
     - [System Overview](#system-overview)
     - [Business Logic](#business-logic)
     - [Data Modeling](#data-modeling)
   - [Datasets and Sources](#datasets-and-sources)
     - [Scripts Usage](#scripts-usage)
-  - [API Documentation](#api-documentation)
   - [Testing](#testing)
 
 ## Features
@@ -69,6 +69,10 @@ uvicorn app.main:app --reload
 ### Database
 Using the included sqlite3 database is recomended, but you can create and populate your own using [these commands](#Datasets). The `requirements.txt` include `psycopg2` for using a `Postgres` database, which is what the deployed API [here](https://routesapi-871656980184.europe-west1.run.app/docs#) uses.
 
+## API Documentation
+Swagger UI documentation can be found [online here](https://routesapi-871656980184.europe-west1.run.app/docs#). This documentation also allows you to test out these endpoints. This is hosted on a serverless platform so will scale to zero, and may take a while to load on first attempt.
+
+Or PDF documentation can be found in the `/documentation` directory [here in this repo](documentation/Documentation.pdf).
 
 ## Architecture and Design
 ### System Overview
@@ -141,11 +145,6 @@ python3 upload_routes.py
 cd /../national_express
 python3 extract_fares.py
 ```
-
-## API Documentation
-Documentation can be found [online here](https://routesapi-871656980184.europe-west1.run.app/docs#).
-
-Or in the `/api` directory [here in this repo]().
 
 ## Testing 
 Tests for the api can be found in `/api/testing`. These tests use the `pytest` library. Services such as authentication and database session are mocked in the `conftest.py` file. Where a database is needed for this, these tests use the `test.db` database in this directory. 

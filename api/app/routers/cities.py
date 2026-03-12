@@ -13,26 +13,26 @@ router = APIRouter(
     tags=["Cities"],
 )
 
-@router.post("/", response_model=schemas.CityRead, status_code=201)
+@router.post(
+    "/", 
+    response_model=schemas.CityRead, 
+    status_code=201,
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User does not have administrative privileges."},
+        422: {"description": "Validation Error - Input data is invalid or name is not unique."}
+    }
+)
 def create_new_city(city: schemas.CityCreate, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin"]))):
     """
     ### Create a new city
-    Adds a unique city record to the database.
+    Adds a unique city record to the database including coordinates for mapping.
     
-    **Access Level:** - Admin only.
-
-    **Args:**
-    - **city**: Schema containing name, latitude, and longitude.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User does not have administrative privileges.
-    - **422**: Validation Error - Input data is invalid.
+    **Access Level:** **Admin only**.
 
     **Notes:**
-    - City names are automatically converted to lowercase.
-    - The name field must be unique.
+    - City names are automatically converted to **lowercase** before saving.
+    - The **name** field must be unique; duplicate entries will result in an error.
     """
     db_city = models.City(**city.model_dump())
     db.add(db_city)
@@ -40,64 +40,62 @@ def create_new_city(city: schemas.CityCreate, db: Session = Depends(get_db), cur
     db.refresh(db_city)
     return db_city
 
-@router.get("/", response_model=List[schemas.CityRead])
+@router.get(
+    "/", 
+    response_model=List[schemas.CityRead],
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."}
+    }
+)
 def get_all_cities(db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
     ### Get all cities
-    Retrieves a list of every city currently stored in the database.
+    Retrieves a complete list of every city currently stored in the database.
 
-    **Access Level:** - Admin and User.
-
-    **Args:**
-    - **db**: Database session dependency.
-
-    **Returns:**
-    - A list of City objects.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
+    **Access Level:** **Admin** and **User**.
     """
     return db.query(models.City).all()
 
-@router.get("/id/{city_id}", response_model=schemas.CityRead, responses={404: {"description": "City not found"}})
+@router.get(
+    "/id/{city_id}", 
+    response_model=schemas.CityRead, 
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."},
+        404: {"description": "Not Found - No city exists with the provided ID."}
+    }
+)
 def get_city_by_id(city_id: int, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
     ### Get city by ID
-    Fetches a specific city's details using its unique integer ID.
+    Fetches a specific city's details using its **unique integer ID**.
 
-    **Access Level:** - Admin and User.
-
-    **Args:**
-    - **city_id**: The unique identifier of the city.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
-    - **404**: Not Found - No city exists with the provided ID.
+    **Access Level:** **Admin** and **User**.
     """
     city = db.query(models.City).filter(models.City.id == city_id).first()
     if not city:
         raise HTTPException(status_code=404, detail="City not found")
     return city
 
-@router.get("/name/{city_name}", response_model=schemas.CityRead, responses={404: {"description": "City not found"}})
+@router.get(
+    "/name/{city_name}", 
+    response_model=schemas.CityRead, 
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."},
+        404: {"description": "Not Found - No city exists with the provided name."}
+    }
+)
 def get_city_by_name(city_name: str, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin", "user"]))):
     """
     ### Get city by name
-    Fetches a specific city's details using its name.
+    Fetches a specific city's details using its **string name**.
 
-    **Access Level:** - Admin and User.
+    **Access Level:** **Admin** and **User**.
 
-    **Args:**
-    - **city_name**: The name string of the city.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
-    - **404**: Not Found - No city exists with the provided name.
+    **Notes:**
+    - The search is **case-insensitive** as all names are stored in lowercase.
     """
     city_name = city_name.lower()
     city = db.query(models.City).filter(models.City.name == city_name).first()
@@ -106,23 +104,25 @@ def get_city_by_name(city_name: str, db: Session = Depends(get_db), current_user
     return city
 
 
-@router.put("/{city_id}", response_model=schemas.CityRead, status_code=200, responses={404: {"description": "City not found"}})
+@router.put(
+    "/{city_id}", 
+    response_model=schemas.CityRead, 
+    status_code=200, 
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User does not have administrative privileges."},
+        404: {"description": "Not Found - The city to update was not found."}
+    }
+)
 def update_city(city_id: int, city_update: schemas.CityCreate, db: Session = Depends(get_db), current_user = Depends(validate_user_role(["admin"]))):
     """
     ### Update city
-    Modifies an existing city record based on its ID.
+    Modifies an existing city record based on its **ID**.
 
-    **Access Level:** - Admin only.
+    **Access Level:** **Admin only**.
 
-    **Args:**
-    - **city_id**: The unique identifier of the city to update.
-    - **city_update**: The new data to apply to the city.
-    - **db**: Database session dependency.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User does not have administrative privileges.
-    - **404**: Not Found - The city to update is not found.
+    **Notes:**
+    - All fields in the request body must be provided for a complete update.
     """
     city = db.query(models.City).filter(models.City.id == city_id).first()
 

@@ -14,32 +14,30 @@ router = APIRouter(
 )
 
 
-@router.get("/id", response_model=schemas.JourneyRead, status_code=200)
-async def get_journey(origin_id: int, destination_id: int, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+@router.get(
+    "/id", 
+    # Notice: 'get_journey' renamed locally in documentation if needed, 
+    # but FastAPI will use the function name.
+    response_model=schemas.JourneyRead, 
+    status_code=200,
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."},
+        404: {"description": "Not Found - No journey could be calculated between the provided IDs."}
+    }
+)
+async def get_journey_by_id(origin_id: int, destination_id: int, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
     ### Fetch a journey by city IDs
-    Calculates the cheapest route between two cities using their unique integer IDs.
+    Calculates the **cheapest route** between two cities using their unique integer identifiers.
+    
+    The algorithm evaluates multiple transport modes (Rail, FlixBus, National Express) to find the most cost-effective path.
 
-    **Access Level:** - Admin and User.
-
-    **Args:**
-    - **origin_id**: ID of the starting city.
-    - **destination_id**: ID of the destination city.
-    - **railcard_discount**: Percentage discount to apply (default 0).
-    - **advanced_fares**: Whether to include advanced fare pricing estimate.
-    - **max_coach_legs**: Maximum number of coach segments allowed.
-
-    **Returns:**
-    - A breakdown of total costs and a list of journey legs.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
-    - **404**: Not Found - No journey could be calculated between the provided IDs.
+    **Access Level:** **Admin** and **User**.
 
     **Notes:**
-    - Total price includes a £2 changeover fee for station transfers.
-    - Returns the full path including all journey legs.
+    - The **total_price** includes a **£3.00 changeover fee** for every station transfer required.
+    - Result includes a full breakdown of ticket costs, applied discounts, and individual journey legs.
     """
     
     graph_manager = GraphManager() # gets us our instance of our singleton class
@@ -65,31 +63,29 @@ async def get_journey(origin_id: int, destination_id: int, railcard_discount: in
     }
 
 
-@router.get("/name", response_model=schemas.JourneyRead, status_code=200)
-async def get_journey(origin_name: str, destination_name: str, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+@router.get(
+    "/name", 
+    response_model=schemas.JourneyRead, 
+    status_code=200,
+    responses={
+        401: {"description": "Unauthorized - Missing or invalid authentication token."},
+        403: {"description": "Forbidden - User role not recognized."},
+        404: {"description": "Not Found - One or both city names do not exist, or no path was found."}
+    }
+)
+async def get_journey_by_name(origin_name: str, destination_name: str, railcard_discount: int = 0, advanced_fares: bool = False, max_coach_legs: int = 2, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     """
     ### Fetch a journey by city names
-    Calculates the cheapest route between two cities using their string names.
+    Calculates the **cheapest route** between two cities using their string names.
+    
+    
 
-    **Access Level:** - Admin and User.
-
-    **Args:**
-    - **origin_name**: Name of the starting city (case-insensitive).
-    - **destination_name**: Name of the destination city (case-insensitive).
-    - **railcard_discount**: Percentage discount to apply (default 0).
-    - **advanced_fares**: Whether to include advanced fare pricing estimate.
-    - **max_coach_legs**: Maximum number of coach segments allowed.
-
-    **Returns:**
-    - A breakdown of total costs and a list of journey legs.
-
-    **Errors:**
-    - **401**: Unauthorized - Missing or invalid authentication token.
-    - **403**: Forbidden - User role not recognized.
-    - **404**: Not Found - If either city name does not exist or no path is found.
+    **Access Level:** **Admin** and **User**.
 
     **Notes:**
-    - Total price includes a £2 changeover fee for station transfers.
+    - City names are **case-insensitive**.
+    - The calculation accounts for **railcard discounts** and **advanced fare** estimates if enabled.
+    - A **£3.00 transfer fee** is added to the total price for each leg transition.
     """
 
     # get both the origin and destination IDs from the names
