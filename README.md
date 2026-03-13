@@ -6,6 +6,7 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
 - [UK Lowest Cost Public Transport Options Route Finder](#uk-lowest-cost-public-transport-options-route-finder)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
+  - [Usage](#usage)
   - [Quick Start](#quick-start)
     - [Run Locally via Uvicorn on Linux](#run-locally-via-uvicorn-on-linux)
     - [Database](#database)
@@ -16,7 +17,6 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
   - [Architecture and Design](#architecture-and-design)
     - [System Overview](#system-overview)
     - [Business Logic](#business-logic)
-    - [Data Modeling](#data-modeling)
   - [Datasets and Sources](#datasets-and-sources)
     - [Scripts Usage](#scripts-usage)
   - [Testing](#testing)
@@ -29,13 +29,25 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
 - Advanced Single rail fair estimation.
 - MCP server.
 
+## Usage
+The quickest way to use this API is via the [SwaggerUI docs page](https://routesapi-871656980184.europe-west1.run.app/docs#). 
+
+- Create an account using the `/auth/signup` endpoint. 
+- Then log in with this account using the `/auth/login` endpoint.
+- Copy the value of the bearer token returned.
+- Click the authorize button at the top of the documentation, and paste in the bearer token where prompted.
+- You can then freely test all `GET` endpoints.
+
+**Note** - This will only make you a user, and therefore you will only be able to access specific enpoints (GET endpoints).  
+
+
 ## Quick Start
 ### Run Locally via Uvicorn on Linux
-**Pre-requisites** <br>
-There are two ways to run the application: with, or without authentication. Running without authentication is easier for development, as there is no need to create a Supabase account. This is all controlled through the `.env` file.<br>
-Create a `.env` file in /api dir. Format shown below:
-<br>
-**With Authentication** 
+You can run the application with or without authentication. The authentication, if active, relies on Supabase. This is toggled through a `.env` file in the `/api` directory of the repository. This must be created yourself.
+
+**Authenticated .env**
+
+To run with Authentication you need a supabase account. Once you have created an account and project you can get the `SUPABASE_URL`, `SUPABASE_PUBLIC_KEY`, and `SUPABASE_SECRET_KEY`. Put them in a `.env` file like this:
 ```
 # local sqlite3 db included in this repo
 DATABASE_URL=sqlite:///./test.db
@@ -47,8 +59,7 @@ SUPABASE_SECRET_KEY=YOUR_SECRET_KEY
 AUTHENTICATION_ON=true
 MCP_INTERNAL_KEY=YOUR_SECRET_MCP_KEY
 ```
-
-**Without Authentication**
+**Without Authentication .env**
 ```
 # local sqlite3 db included in this repo
 DATABASE_URL=sqlite:///./test.db
@@ -60,11 +71,14 @@ SUPABASE_SECRET_KEY=anything
 AUTHENTICATION_ON=false
 MCP_INTERNAL_KEY=YOUR_SECRET_MCP_KEY
 ```
+**Pre-requisites** <br>
+- Python version 3.12 or later.
 
 **Follow these steps to run**
 ```
 git clone https://github.com/noahdavis05/Web-Services-CWK1.git 
 cd Web-Services-CWK1/api
+## create .env file described above ##
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
@@ -80,7 +94,7 @@ Swagger UI documentation can be found [online here](https://routesapi-8716569801
 Or PDF documentation can be found in the `/documentation` directory [here in this repo](documentation/Documentation.pdf). These docs were made through the [**rapipdf** tool](https://mrin9.github.io/RapiPdf/).
 
 ## MCP
-This API supports MCP, this is only enabled for getting a journey between two cities. This allows AI assistants/tools to interact natively with the API. This was implemented through the `fastapi_mcp` library.
+This API supports MCP, this is only enabled for getting a journey between two cities. This allows AI assistants/tools to interact natively with the API, through natural language requests from the user. This was implemented through the `fastapi_mcp` library.
 ### Connecting to an AI client
 **Prerequisites** - To authenticate the MCP client you must set a `MCP_INTERNAL_KEY` in your .env file. This bypasses full authentication for your MCP client as long as you set this value in the headers shown below. Or alternatively, you can manually log in using the `/auth/login` endpoint, and use this bearer token in the headers shown below.
 
@@ -118,8 +132,6 @@ This has only been tested through the Roo Code VSCode extension. To do this, dow
 - To find a journey we use a **Dijktra's Algorithm** on our singleton class. 
 - The Dijkstra's algorithm returns all the routes within the journey, and the cost breakdown including discounts from railcards, and extra transfer fees for when you use different stations in the same city as part of your route.
 - We cache the results of the `find_cheapest_path` function using the `fastapi_cache` library for 1 hour. This avoids repeating the same calculations numerous times.
-
-### Data Modeling
 
 
 ## Datasets and Sources
