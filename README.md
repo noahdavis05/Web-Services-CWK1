@@ -2,24 +2,21 @@
 A RESTful API that estimates the cheapest journeys between any of the UK's 200 largest towns and cities via multiple modes of public transport.
 
 ## Table of Contents
-
-- [UK Lowest Cost Public Transport Options Route Finder](#uk-lowest-cost-public-transport-options-route-finder)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Usage](#usage)
-  - [Quick Start](#quick-start)
-    - [Run Locally via Uvicorn on Linux](#run-locally-via-uvicorn-on-linux)
-    - [Database](#database)
-  - [API Documentation](#api-documentation)
-  - [MCP](#mcp)
-    - [Connecting to an AI client](#connecting-to-an-ai-client)
-    - [Roo Code Example](#roo-code-example)
-  - [Testing](#testing)
-  - [Architecture and Design](#architecture-and-design)
-    - [System Overview](#system-overview)
-    - [Business Logic](#business-logic)
-  - [Datasets and Sources](#datasets-and-sources)
-    - [Scripts Usage](#scripts-usage)
+- [Features](#features)
+- [Usage](#usage)
+- [Quick Start](#quick-start)
+  - [Run Locally via Uvicorn on Linux](#run-locally-via-uvicorn-on-linux)
+  - [Database](#database)
+- [API Documentation](#api-documentation)
+- [MCP](#mcp)
+  - [Connecting to an AI client](#connecting-to-an-ai-client)
+  - [Roo Code Example](#roo-code-example)
+- [Testing](#testing)
+- [Architecture and Design](#architecture-and-design)
+  - [System Overview](#system-overview)
+  - [Business Logic](#business-logic)
+- [Datasets and Sources](#datasets-and-sources)
+  - [Scripts Usage](#scripts-usage)
 
 ## Features
 - Find cheap public transport journeys between 200 largest UK towns and cities.
