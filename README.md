@@ -14,12 +14,12 @@ A RESTful API that estimates the cheapest journeys between any of the UK's 200 l
   - [MCP](#mcp)
     - [Connecting to an AI client](#connecting-to-an-ai-client)
     - [Roo Code Example](#roo-code-example)
+  - [Testing](#testing)
   - [Architecture and Design](#architecture-and-design)
     - [System Overview](#system-overview)
     - [Business Logic](#business-logic)
   - [Datasets and Sources](#datasets-and-sources)
     - [Scripts Usage](#scripts-usage)
-  - [Testing](#testing)
 
 ## Features
 - Find cheap public transport journeys between 200 largest UK towns and cities.
@@ -118,6 +118,33 @@ This has only been tested through the Roo Code VSCode extension. To do this, dow
 }
 ```
 
+## Testing 
+Tests for the api can be found in `/api/testing`. These tests use the `pytest` library. Services such as authentication and database session are mocked in the `conftest.py` file. Where a database is needed for this, these tests use the `test.db` database in this directory. 
+
+The database is required to always remain the same in order for these tests to always work correctly. For example, if we are testing a **DELETE** route, we need the item deleted to be put back into the database. The mock database session ensures that once a test has ran all database changes are rolled back.
+
+Tests are ran automatically on commit through github actions in the `/.github/workflows/tests.yaml` file. But can also be ran manually. To run manually, create a `.env.test` file in the `/api` directory which looks like:
+
+```
+# Local Development
+DATABASE_URL=sqlite:///./testing/test.db
+
+# Keys for supabase auth
+SUPABASE_URL=ANY_WEBSITE_URL
+SUPABASE_PUBLIC_KEY=temp
+SUPABASE_SECRET_KEY=temp
+AUTHENTICATION_ON=true
+MCP_INTERNAL_KEY=YOUR_SECRET_MCP_KEY
+```
+
+Then run the following commands to run the tests:
+```
+cd /api
+source venv/bin/activate
+pytest
+```
+
+
 
 
 ## Architecture and Design
@@ -188,32 +215,5 @@ cd /../coach-fares/flix-bus
 python3 upload_routes.py
 cd /../national_express
 python3 extract_fares.py
-```
-
-## Testing 
-Tests for the api can be found in `/api/testing`. These tests use the `pytest` library. Services such as authentication and database session are mocked in the `conftest.py` file. Where a database is needed for this, these tests use the `test.db` database in this directory. 
-
-The database is required to always remain the same in order for these tests to always work correctly. For example, if we are testing a **DELETE** route, we need the item deleted to be put back into the database. The mock database session ensures that once a test has ran all database changes are rolled back.
-
-Tests are ran automatically on commit through github actions in the `/.github/workflows/tests.yaml` file. But can also be ran manually. To run manually, create a `.env.test` file in the `/api` directory which looks like:
-
-```
-
-# Local Development
-DATABASE_URL=sqlite:///./testing/test.db
-
-# Keys for supabase auth
-SUPABASE_URL=ANY_WEBSITE_URL
-SUPABASE_PUBLIC_KEY=temp
-SUPABASE_SECRET_KEY=temp
-AUTHENTICATION_ON=true
-MCP_INTERNAL_KEY=YOUR_SECRET_MCP_KEY
-```
-
-Then run the following commands to run the tests:
-```
-cd /api
-source venv/bin/activate
-pytest
 ```
 
